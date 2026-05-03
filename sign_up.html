@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SkyLa — Đăng nhập</title>
+  <title>SkyLa — Tạo tài khoản</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -46,7 +46,11 @@
       border-radius: 50%;
     }
 
-    .cloud { position: absolute; background: rgba(255,255,255,0.12); border-radius: 50px; }
+    .cloud {
+      position: absolute;
+      background: rgba(255,255,255,0.12);
+      border-radius: 50px;
+    }
     .cloud1 { width: 120px; height: 40px; top: 18%; left: 10%; }
     .cloud2 { width: 80px;  height: 28px; top: 32%; right: 8%; }
     .cloud3 { width: 100px; height: 34px; bottom: 28%; left: 15%; }
@@ -87,45 +91,41 @@
       line-height: 1.6;
     }
 
-    .weather-cards {
+    .feature-list {
       margin-top: 3rem;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 1rem;
       width: 100%;
       max-width: 260px;
       z-index: 1;
     }
 
-    .weather-card {
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 14px;
-      padding: 12px 16px;
+    .feature-item {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
+      color: rgba(255,255,255,0.9);
+      font-size: 14px;
     }
 
-    .wc-icon { font-size: 28px; }
-    .wc-info { flex: 1; }
-    .wc-city { color: #fff; font-size: 14px; font-weight: 500; }
-    .wc-desc { color: rgba(255,255,255,0.65); font-size: 12px; }
-    .wc-temp {
-      font-family: 'Nunito', sans-serif;
-      font-size: 22px;
-      font-weight: 700;
-      color: #fff;
+    .feature-icon {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
     }
 
     /* ===== RIGHT PANEL ===== */
     .right-panel {
-      width: 460px;
+      width: 480px;
       background: #fff;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 3rem;
+      padding: 3rem 3rem;
     }
 
     .form-header { margin-bottom: 2rem; }
@@ -138,7 +138,17 @@
       margin-bottom: 6px;
     }
 
-    .form-subtitle { font-size: 14px; color: #78909C; }
+    .form-subtitle {
+      font-size: 14px;
+      color: #78909C;
+      font-weight: 400;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
 
     .field {
       display: flex;
@@ -147,9 +157,14 @@
       margin-bottom: 16px;
     }
 
-    .field label { font-size: 13px; font-weight: 500; color: #37474F; }
+    .field label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #37474F;
+    }
 
-    .field input {
+    .field input,
+    .field select {
       height: 44px;
       border: 1.5px solid #BBDEFB;
       border-radius: 10px;
@@ -160,10 +175,14 @@
       background: #F8FBFF;
       transition: border-color 0.2s, box-shadow 0.2s;
       outline: none;
+      appearance: none;
+      -webkit-appearance: none;
     }
 
     .field input::placeholder { color: #B0BEC5; }
-    .field input:focus {
+
+    .field input:focus,
+    .field select:focus {
       border-color: #1976D2;
       box-shadow: 0 0 0 3px rgba(25,118,210,0.12);
       background: #fff;
@@ -173,35 +192,40 @@
     .password-wrap input { width: 100%; padding-right: 44px; }
 
     .eye-btn {
-      position: absolute; right: 12px; top: 50%;
+      position: absolute;
+      right: 12px; top: 50%;
       transform: translateY(-50%);
       background: none; border: none; cursor: pointer;
       color: #90A4AE; font-size: 16px; padding: 4px;
     }
 
-    .row-options {
+    .terms-row {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
       margin-bottom: 20px;
     }
 
-    .remember-row { display: flex; align-items: center; gap: 8px; }
-    .remember-row input[type="checkbox"] {
-      width: 16px; height: 16px;
+    .terms-row input[type="checkbox"] {
+      width: 17px; height: 17px;
+      margin-top: 2px;
       accent-color: #1976D2;
+      flex-shrink: 0;
     }
-    .remember-row label { font-size: 13px; color: #607D8B; cursor: pointer; }
 
-    .forgot-link {
+    .terms-row label {
       font-size: 13px;
-      color: #1976D2;
-      font-weight: 500;
-      text-decoration: none;
+      color: #607D8B;
+      line-height: 1.5;
     }
-    .forgot-link:hover { text-decoration: underline; }
 
-    .btn-login {
+    .terms-row a {
+      color: #1976D2;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .btn-register {
       width: 100%;
       height: 48px;
       background: linear-gradient(135deg, #1565C0, #1976D2);
@@ -215,14 +239,9 @@
       letter-spacing: 0.3px;
       transition: opacity 0.2s, transform 0.15s;
       margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-
     }
-    .btn-login:hover { opacity: 0.92; transform: translateY(-1px); }
-    .btn-login:active { transform: scale(0.98); }
+    .btn-register:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-register:active { transform: scale(0.98); }
 
     .divider {
       display: flex; align-items: center; gap: 12px;
@@ -254,15 +273,25 @@
       flex-shrink: 0;
     }
 
-    .register-link { text-align: center; font-size: 14px; color: #78909C; }
-    .register-link a { color: #1976D2; font-weight: 600; text-decoration: none; }
+    .login-link {
+      text-align: center;
+      font-size: 14px;
+      color: #78909C;
+    }
+    .login-link a {
+      color: #1976D2;
+      font-weight: 600;
+      text-decoration: none;
+    }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 800px) {
       body { flex-direction: column; }
       .left-panel { padding: 2rem 1.5rem; min-height: auto; }
-      .weather-cards { display: none; }
+      .feature-list { display: none; }
+      .brand-tagline { max-width: 280px; }
       .right-panel { width: 100%; padding: 2rem 1.5rem; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
     }
   </style>
 </head>
@@ -280,30 +309,22 @@
       <div class="brand-tagline">Thời tiết thông minh cho cuộc sống của bạn</div>
     </div>
 
-    <div class="weather-cards">
-      <div class="weather-card">
-        <div class="wc-icon">⛅</div>
-        <div class="wc-info">
-          <div class="wc-city">Hồ Chí Minh</div>
-          <div class="wc-desc">Có mây rải rác</div>
-        </div>
-        <div class="wc-temp">34°</div>
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="feature-icon">🗺️</div>
+        <span>Bản đồ thời tiết thế giới tương tác</span>
       </div>
-      <div class="weather-card">
-        <div class="wc-icon">🌧️</div>
-        <div class="wc-info">
-          <div class="wc-city">Hà Nội</div>
-          <div class="wc-desc">Mưa nhẹ</div>
-        </div>
-        <div class="wc-temp">27°</div>
+      <div class="feature-item">
+        <div class="feature-icon">📊</div>
+        <span>Dự báo 7 ngày chi tiết</span>
       </div>
-      <div class="weather-card">
-        <div class="wc-icon">☀️</div>
-        <div class="wc-info">
-          <div class="wc-city">Đà Nẵng</div>
-          <div class="wc-desc">Nắng đẹp</div>
-        </div>
-        <div class="wc-temp">31°</div>
+      <div class="feature-item">
+        <div class="feature-icon">🏙️</div>
+        <span>So sánh thời tiết nhiều thành phố</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📰</div>
+        <span>Tin tức thời tiết cập nhật liên tục</span>
       </div>
     </div>
   </div>
@@ -311,8 +332,19 @@
   <!-- RIGHT PANEL -->
   <div class="right-panel">
     <div class="form-header">
-      <div class="form-title">Chào mừng trở lại!</div>
-      <div class="form-subtitle">Đăng nhập để xem thời tiết của bạn</div>
+      <div class="form-title">Tạo tài khoản</div>
+      <div class="form-subtitle">Tham gia SkyLa để trải nghiệm thời tiết theo cách mới</div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label for="ho">Họ</label>
+        <input type="text" id="ho" placeholder="Nguyễn" />
+      </div>
+      <div class="field">
+        <label for="ten">Tên</label>
+        <input type="text" id="ten" placeholder="Văn A" />
+      </div>
     </div>
 
     <div class="field">
@@ -321,24 +353,43 @@
     </div>
 
     <div class="field">
+      <label for="city">Thành phố của bạn</label>
+      <select id="city">
+        <option value="" disabled selected>— Chọn thành phố —</option>
+        <option>Hồ Chí Minh</option>
+        <option>Hà Nội</option>
+        <option>Đà Nẵng</option>
+        <option>Cần Thơ</option>
+        <option>Hải Phòng</option>
+        <option>Khác...</option>
+      </select>
+    </div>
+
+    <div class="field">
       <label for="pw">Mật khẩu</label>
       <div class="password-wrap">
-        <input type="password" id="pw" placeholder="Nhập mật khẩu" />
+        <input type="password" id="pw" placeholder="Ít nhất 8 ký tự" />
         <button class="eye-btn" onclick="togglePw('pw', this)">👁</button>
       </div>
     </div>
 
-    <div class="row-options">
-      <div class="remember-row">
-        <input type="checkbox" id="remember" />
-        <label for="remember">Ghi nhớ đăng nhập</label>
+    <div class="field">
+      <label for="cpw">Xác nhận mật khẩu</label>
+      <div class="password-wrap">
+        <input type="password" id="cpw" placeholder="Nhập lại mật khẩu" />
+        <button class="eye-btn" onclick="togglePw('cpw', this)">👁</button>
       </div>
-      <a href="#" class="forgot-link">Quên mật khẩu?</a>
     </div>
 
-    <a href="./main.html" class="btn-login">Đăng nhập</a>
+    <div class="terms-row">
+      <input type="checkbox" id="terms" />
+      <label for="terms">
+        Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a> và
+        <a href="#">Chính sách bảo mật</a> của SkyLa
+      </label>
+    </div>
 
-   
+    <button class="btn-register">Tạo tài khoản</button>
 
     <div class="divider">
       <div class="divider-line"></div>
@@ -348,11 +399,11 @@
 
     <button class="btn-google">
       <div class="google-icon"></div>
-      Đăng nhập với Google
+      Đăng ký với Google
     </button>
 
-    <div class="register-link">
-      Chưa có tài khoản? <a href="./sign_up.html">Đăng ký miễn phí</a>
+    <div class="login-link">
+      Đã có tài khoản? <a href="./login.html">Đăng nhập ngay</a>
     </div>
   </div>
 

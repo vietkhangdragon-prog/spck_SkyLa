@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyLa — Bản đồ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; background: #0d1b2e; font-family: 'Outfit', sans-serif; color: #fff; display: flex; flex-direction: column; }
+
+    .navbar { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px; background: rgba(13,27,46,0.97); border-bottom: 1px solid rgba(255,255,255,0.07); position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900; color: #fff; }
+    .nav-logo span { color: #42A5F5; }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-link { padding: 5px 13px; border-radius: 8px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); cursor: pointer; text-decoration: none; }
+    .nav-link:hover { background: rgba(255,255,255,0.07); color: #fff; }
+    .nav-link.active { background: rgba(66,165,245,0.18); color: #42A5F5; }
+
+    .map-layout { display: flex; flex: 1; height: calc(100vh - 56px); }
+
+    /* LEFT PANEL */
+    .map-panel { width: 300px; background: rgba(10,20,38,0.95); border-right: 1px solid rgba(255,255,255,0.07); display: flex; flex-direction: column; overflow: hidden; }
+    .panel-header { padding: 16px 18px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .panel-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.45); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+    .search-wrap { position: relative; }
+    .search-wrap input { width: 100%; height: 36px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0 14px 0 36px; font-size: 13px; font-family: 'Outfit', sans-serif; color: #fff; outline: none; }
+    .search-wrap input::placeholder { color: rgba(255,255,255,0.3); }
+    .search-wrap input:focus { border-color: rgba(66,165,245,0.4); }
+    .s-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 13px; opacity: 0.4; }
+
+    .city-list { overflow-y: auto; flex: 1; padding: 8px 10px; }
+    .city-list::-webkit-scrollbar { width: 4px; }
+    .city-list::-webkit-scrollbar-track { background: transparent; }
+    .city-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+    .city-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; cursor: pointer; transition: background 0.15s; margin-bottom: 2px; border: 1px solid transparent; }
+    .city-item:hover { background: rgba(255,255,255,0.06); }
+    .city-item.selected { background: rgba(66,165,245,0.15); border-color: rgba(66,165,245,0.25); }
+    .city-icon { font-size: 20px; width: 32px; text-align: center; }
+    .city-info { flex: 1; }
+    .city-name { font-size: 13px; font-weight: 500; color: #fff; }
+    .city-region { font-size: 11px; color: rgba(255,255,255,0.4); }
+    .city-temp { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 800; color: #fff; }
+    .city-temp.hot { color: #EF9F27; }
+    .city-temp.cool { color: #42A5F5; }
+
+    .layer-btns { padding: 12px 10px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; gap: 6px; flex-wrap: wrap; }
+    .layer-btn { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 500; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.2s; }
+    .layer-btn.active { background: rgba(66,165,245,0.2); border-color: rgba(66,165,245,0.4); color: #42A5F5; }
+
+    /* MAP AREA */
+    .map-area { flex: 1; position: relative; background: #0d1b2e; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .map-svg-wrap { position: relative; height: 100%; display: flex; align-items: center; justify-content: center; }
+
+    /* POPUP */
+    .map-popup { position: absolute; background: #1a2d45; border: 1px solid rgba(66,165,245,0.35); border-radius: 12px; padding: 12px 14px; min-width: 160px; pointer-events: none; z-index: 10; display: none; }
+    .popup-city { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .popup-temp { font-family: 'Nunito', sans-serif; font-size: 28px; font-weight: 900; color: #fff; line-height: 1; }
+    .popup-desc { font-size: 11px; color: rgba(255,255,255,0.55); margin: 4px 0 8px; }
+    .popup-row { display: flex; gap: 12px; }
+    .popup-item { font-size: 11px; color: rgba(255,255,255,0.5); }
+    .popup-item span { display: block; font-size: 12px; color: #fff; font-weight: 500; }
+
+    .my-loc-btn { position: absolute; bottom: 20px; right: 20px; width: 42px; height: 42px; background: #1976D2; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; border: 2px solid rgba(66,165,245,0.4); z-index: 5; }
+    .my-loc-btn:hover { background: #1565C0; }
+
+    .legend { position: absolute; bottom: 20px; left: 20px; background: rgba(13,27,46,0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 14px; z-index: 5; }
+    .legend-title { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .legend-bar { width: 140px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, #42A5F5, #EF9F27, #E53935); margin-bottom: 4px; }
+    .legend-labels { display: flex; justify-content: space-between; font-size: 10px; color: rgba(255,255,255,0.5); }
+
+    @media (max-width: 700px) {
+      .map-layout { flex-direction: column; }
+      .map-panel { width: 100%; height: 200px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+      .city-list { display: flex; flex-direction: row; overflow-x: auto; padding: 8px; }
+      .city-item { min-width: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-logo">Sky<span>La</span></div>
+  <div class="nav-links">
+    <a class="nav-link" href="./main.html">Trang chủ</a>
+    <a class="nav-link active" href="#">Bản đồ</a>
+    <a class="nav-link" href="#">Tin tức</a>
+    <a class="nav-link" href="#">Lịch sử</a>
+  </div>
+  <div style="font-size:13px;color:rgba(255,255,255,0.4);" id="updateTime"></div>
+</nav>
+
+<div class="map-layout">
+  <!-- LEFT PANEL -->
+  <div class="map-panel">
+    <div class="panel-header">
+      <div class="panel-title">Thành phố</div>
+      <div class="search-wrap">
+        <span class="s-icon">🔍</span>
+        <input type="text" placeholder="Tìm tỉnh thành..." id="citySearch" oninput="filterCities(this.value)" />
+      </div>
+    </div>
+    <div class="city-list" id="cityList"></div>
+    <div class="layer-btns">
+      <div class="layer-btn active" onclick="setLayer(this)">🌡 Nhiệt độ</div>
+      <div class="layer-btn" onclick="setLayer(this)">🌧 Mưa</div>
+      <div class="layer-btn" onclick="setLayer(this)">💨 Gió</div>
+      <div class="layer-btn" onclick="setLayer(this)">☀ UV</div>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-area" id="mapArea">
+    <div class="map-svg-wrap">
+      <svg id="vnMap" viewBox="0 0 320 700" style="height:calc(100vh - 56px);width:auto;max-width:100%;">
+        <rect width="320" height="700" fill="#0a1628"/>
+        <path d="
+          M 155 18 C 160 18 175 22 180 30
+          L 195 55 200 75 210 90 215 110
+          C 220 125 225 135 220 148
+          L 210 160 205 175 215 190 220 210
+          C 225 225 228 240 225 255
+          L 218 268 210 280 205 295 200 310
+          C 196 322 192 335 188 348
+          L 180 360 170 372 160 385 150 398
+          C 142 408 132 420 125 432
+          L 118 445 112 458 108 472 105 488
+          C 102 502 100 515 98 528
+          L 95 542 92 556 88 568 82 578
+          C 76 588 68 596 62 604
+          L 55 615 50 625 55 635 65 642
+          C 75 648 90 650 105 648
+          L 120 644 135 638 148 630 158 620
+          C 166 612 172 602 176 592
+          L 178 580 175 568 170 558 165 548
+          C 162 538 160 528 162 518
+          L 168 505 175 494 180 482 182 470
+          C 184 458 184 446 182 434
+          L 178 422 172 412 168 400 166 388
+          C 165 376 166 364 170 352
+          L 176 340 182 328 190 316 198 305
+          C 205 295 210 284 212 272
+          L 212 258 208 245 202 232 198 220
+          C 194 208 192 196 194 184
+          L 200 172 208 162 212 150 210 138
+          C 208 126 202 115 196 105
+          L 188 94 182 82 178 68 172 54
+          L 165 38 158 26 155 18 Z
+        " fill="#1a3a5c" stroke="#2a5a8c" stroke-width="1.5"/>
+        <g id="cityDots"></g>
+      </svg>
+    </div>
+
+    <div class="map-popup" id="mapPopup">
+      <div class="popup-city" id="popCity"></div>
+      <div class="popup-temp" id="popTemp"></div>
+      <div class="popup-desc" id="popDesc"></div>
+      <div class="popup-row">
+        <div class="popup-item">Độ ẩm<span id="popHum"></span></div>
+        <div class="popup-item">Gió<span id="popWind"></span></div>
+        <div class="popup-item">UV<span id="popUv"></span></div>
+      </div>
+    </div>
+
+    <div class="my-loc-btn" title="Vị trí của tôi">📍</div>
+
+    <div class="legend">
+      <div class="legend-title">Nhiệt độ (°C)</div>
+      <div class="legend-bar"></div>
+      <div class="legend-labels"><span>20°</span><span>30°</span><span>38°</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const cities = [
+    {name:'Hà Nội',region:'Miền Bắc',icon:'🌧️',temp:27,desc:'Mưa nhẹ',hum:85,wind:15,uv:3,x:168,y:148},
+    {name:'Hải Phòng',region:'Miền Bắc',icon:'🌦️',temp:28,desc:'Có mưa',hum:82,wind:18,uv:3,x:192,y:158},
+    {name:'Quảng Ninh',region:'Miền Bắc',icon:'⛅',temp:26,desc:'Có mây',hum:78,wind:12,uv:4,x:205,y:145},
+    {name:'Nam Định',region:'Miền Bắc',icon:'🌧️',temp:27,desc:'Mưa vừa',hum:86,wind:14,uv:2,x:162,y:165},
+    {name:'Vinh',region:'Miền Trung',icon:'⛅',temp:29,desc:'Có mây',hum:74,wind:10,uv:5,x:148,y:215},
+    {name:'Đồng Hới',region:'Miền Trung',icon:'🌤️',temp:30,desc:'Ít mây',hum:70,wind:12,uv:6,x:140,y:248},
+    {name:'Huế',region:'Miền Trung',icon:'🌤️',temp:31,desc:'Ít mây',hum:68,wind:11,uv:6,x:148,y:278},
+    {name:'Đà Nẵng',region:'Miền Trung',icon:'☀️',temp:31,desc:'Nắng đẹp',hum:65,wind:10,uv:7,x:158,y:300},
+    {name:'Hội An',region:'Miền Trung',icon:'☀️',temp:32,desc:'Nắng đẹp',hum:63,wind:9,uv:7,x:162,y:312},
+    {name:'Quy Nhơn',region:'Miền Trung',icon:'☀️',temp:33,desc:'Nắng to',hum:60,wind:8,uv:8,x:168,y:352},
+    {name:'Nha Trang',region:'Miền Trung',icon:'☀️',temp:33,desc:'Nắng đẹp',hum:62,wind:9,uv:8,x:170,y:400},
+    {name:'Đà Lạt',region:'Tây Nguyên',icon:'🌤️',temp:22,desc:'Mát mẻ',hum:75,wind:7,uv:5,x:155,y:425},
+    {name:'Buôn Ma Thuột',region:'Tây Nguyên',icon:'⛅',temp:28,desc:'Có mây',hum:72,wind:8,uv:6,x:148,y:410},
+    {name:'Tp. HCM',region:'Miền Nam',icon:'⛅',temp:34,desc:'Có mây rải rác',hum:78,wind:12,uv:8,x:145,y:475},
+    {name:'Cần Thơ',region:'Miền Nam',icon:'🌤️',temp:33,desc:'Ít mây',hum:76,wind:10,uv:7,x:132,y:510},
+    {name:'Cà Mau',region:'Miền Nam',icon:'🌦️',temp:32,desc:'Có mưa',hum:82,wind:11,uv:6,x:110,y:558},
+  ];
+
+  let selectedCity = null;
+
+  function getTempColor(t) {
+    if(t <= 22) return '#42A5F5';
+    if(t <= 27) return '#66BB6A';
+    if(t <= 31) return '#EF9F27';
+    return '#E53935';
+  }
+
+  function renderCityList(list) {
+    document.getElementById('cityList').innerHTML = list.map(c => `
+      <div class="city-item${selectedCity===c.name?' selected':''}" onclick="selectCity('${c.name}')">
+        <div class="city-icon">${c.icon}</div>
+        <div class="city-info">
+          <div class="city-name">${c.name}</div>
+          <div class="city-region">${c.region}</div>
+        </div>
+        <div class="city-temp${c.temp>=34?' hot':c.temp<=25?' cool':''}">${c.temp}°</div>
+      </div>
+    `).join('');
+  }
+
+  function renderDots() {
+    document.getElementById('cityDots').innerHTML = cities.map(c => {
+      const col = getTempColor(c.temp);
+      return `
+        <g onclick="showPopup(event,'${c.name}')" style="cursor:pointer;">
+          <circle cx="${c.x}" cy="${c.y}" r="7" fill="${col}" fill-opacity="0.35" stroke="${col}" stroke-width="1.5"/>
+          <circle cx="${c.x}" cy="${c.y}" r="4" fill="${col}"/>
+          <text x="${c.x+10}" y="${c.y-5}" fill="${col}" font-size="12" font-family="Nunito,sans-serif" font-weight="800">${c.temp}°</text>
+          <text x="${c.x+10}" y="${c.y+7}" fill="rgba(255,255,255,0.75)" font-size="10" font-family="Outfit,sans-serif">${c.name}</text>
+        </g>
+      `;
+    }).join('');
+  }
+
+  function showPopup(e, name) {
+    const c = cities.find(x => x.name === name);
+    if(!c) return;
+    selectedCity = name;
+    renderCityList(cities);
+
+    const popup = document.getElementById('mapPopup');
+    document.getElementById('popCity').textContent = c.name + ' · ' + c.region;
+    document.getElementById('popTemp').textContent = c.temp + '°C';
+    document.getElementById('popDesc').textContent = c.icon + ' ' + c.desc;
+    document.getElementById('popHum').textContent = c.hum + '%';
+    document.getElementById('popWind').textContent = c.wind + ' km/h';
+    document.getElementById('popUv').textContent = c.uv + '/10';
+
+    const mapArea = document.getElementById('mapArea');
+    const rect = mapArea.getBoundingClientRect();
+    const svgEl = document.getElementById('vnMap');
+    const svgRect = svgEl.getBoundingClientRect();
+    const scaleX = svgRect.width / 320;
+    const scaleY = svgRect.height / 700;
+
+    let px = svgRect.left - rect.left + c.x * scaleX + 12;
+    let py = svgRect.top - rect.top + c.y * scaleY - 60;
+    if(px + 170 > rect.width) px -= 185;
+    if(py < 10) py += 80;
+
+    popup.style.left = px + 'px';
+    popup.style.top = py + 'px';
+    popup.style.display = 'block';
+  }
+
+  function selectCity(name) {
+    selectedCity = name;
+    renderCityList(cities);
+    showPopup({}, name);
+  }
+
+  function filterCities(q) {
+    const filtered = q
+      ? cities.filter(c => c.name.toLowerCase().includes(q.toLowerCase()) || c.region.toLowerCase().includes(q.toLowerCase()))
+      : cities;
+    renderCityList(filtered);
+  }
+
+  function setLayer(btn) {
+    document.querySelectorAll('.layer-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  document.getElementById('mapArea').addEventListener('click', function(e) {
+    if(e.target === this) {
+      document.getElementById('mapPopup').style.display = 'none';
+      selectedCity = null;
+      renderCityList(cities);
+    }
+  });
+
+  const now = new Date();
+  document.getElementById('updateTime').textContent =
+    'Cập nhật: ' + now.getHours().toString().padStart(2,'0') + ':' +
+    now.getMinutes().toString().padStart(2,'0') + ' ' +
+    now.getDate().toString().padStart(2,'0') + '/' +
+    (now.getMonth()+1).toString().padStart(2,'0') + '/' + now.getFullYear();
+
+  renderCityList(cities);
+  renderDots();
+</script>
+
+</body>
+</html>
