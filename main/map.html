@@ -8,15 +8,39 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { min-height: 100vh; background: #0d1b2e; font-family: 'Outfit', sans-serif; color: #fff; display: flex; flex-direction: column; }
+/* THAY THẾ .navbar cũ */
+.navbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 56px;
+  padding: 0 24px;
+  background: rgba(13,27,46,0.97);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
 
-    .navbar { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px; background: rgba(13,27,46,0.97); border-bottom: 1px solid rgba(255,255,255,0.07); position: sticky; top: 0; z-index: 100; }
-    .nav-logo { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900; color: #fff; }
+/* THÊM justify-content vào .nav-links */
+.nav-links {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+/* THÊM MỚI */
+.nav-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
     .nav-logo span { color: #42A5F5; }
     .nav-links { display: flex; gap: 4px; }
     .nav-link { padding: 5px 13px; border-radius: 8px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); cursor: pointer; text-decoration: none; }
     .nav-link:hover { background: rgba(255,255,255,0.07); color: #fff; }
     .nav-link.active { background: rgba(66,165,245,0.18); color: #42A5F5; }
-
     .map-layout { display: flex; flex: 1; height: calc(100vh - 56px); }
 
     /* LEFT PANEL */
@@ -85,10 +109,10 @@
   <div class="nav-links">
     <a class="nav-link" href="./main.html">Trang chủ</a>
     <a class="nav-link active" href="#">Bản đồ</a>
-    <a class="nav-link" href="#">Tin tức</a>
-    <a class="nav-link" href="#">Lịch sử</a>
+    <a class="nav-link" href="./news.html">Tin tức</a>
+    <a class="nav-link" href="./history.html">Lịch sử</a>
   </div>
-  <div style="font-size:13px;color:rgba(255,255,255,0.4);" id="updateTime"></div>
+  <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-left: 200px" id="updateTime"></div>
 </nav>
 
 <div class="map-layout">
