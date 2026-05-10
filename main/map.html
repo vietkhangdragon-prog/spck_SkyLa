@@ -199,22 +199,22 @@
 
 <script>
   const cities = [
-    {name:'Hà Nội',region:'Miền Bắc',icon:'🌧️',temp:27,desc:'Mưa nhẹ',hum:85,wind:15,uv:3,x:168,y:148},
-    {name:'Hải Phòng',region:'Miền Bắc',icon:'🌦️',temp:28,desc:'Có mưa',hum:82,wind:18,uv:3,x:192,y:158},
-    {name:'Quảng Ninh',region:'Miền Bắc',icon:'⛅',temp:26,desc:'Có mây',hum:78,wind:12,uv:4,x:205,y:145},
-    {name:'Nam Định',region:'Miền Bắc',icon:'🌧️',temp:27,desc:'Mưa vừa',hum:86,wind:14,uv:2,x:162,y:165},
-    {name:'Vinh',region:'Miền Trung',icon:'⛅',temp:29,desc:'Có mây',hum:74,wind:10,uv:5,x:148,y:215},
-    {name:'Đồng Hới',region:'Miền Trung',icon:'🌤️',temp:30,desc:'Ít mây',hum:70,wind:12,uv:6,x:140,y:248},
-    {name:'Huế',region:'Miền Trung',icon:'🌤️',temp:31,desc:'Ít mây',hum:68,wind:11,uv:6,x:148,y:278},
-    {name:'Đà Nẵng',region:'Miền Trung',icon:'☀️',temp:31,desc:'Nắng đẹp',hum:65,wind:10,uv:7,x:158,y:300},
-    {name:'Hội An',region:'Miền Trung',icon:'☀️',temp:32,desc:'Nắng đẹp',hum:63,wind:9,uv:7,x:162,y:312},
-    {name:'Quy Nhơn',region:'Miền Trung',icon:'☀️',temp:33,desc:'Nắng to',hum:60,wind:8,uv:8,x:168,y:352},
-    {name:'Nha Trang',region:'Miền Trung',icon:'☀️',temp:33,desc:'Nắng đẹp',hum:62,wind:9,uv:8,x:170,y:400},
-    {name:'Đà Lạt',region:'Tây Nguyên',icon:'🌤️',temp:22,desc:'Mát mẻ',hum:75,wind:7,uv:5,x:155,y:425},
-    {name:'Buôn Ma Thuột',region:'Tây Nguyên',icon:'⛅',temp:28,desc:'Có mây',hum:72,wind:8,uv:6,x:148,y:410},
-    {name:'Tp. HCM',region:'Miền Nam',icon:'⛅',temp:34,desc:'Có mây rải rác',hum:78,wind:12,uv:8,x:145,y:475},
-    {name:'Cần Thơ',region:'Miền Nam',icon:'🌤️',temp:33,desc:'Ít mây',hum:76,wind:10,uv:7,x:132,y:510},
-    {name:'Cà Mau',region:'Miền Nam',icon:'🌦️',temp:32,desc:'Có mưa',hum:82,wind:11,uv:6,x:110,y:558},
+    {name:'Hà Nội',apiName:'Hanoi',region:'Miền Bắc',icon:'🌧️',temp:27,desc:'Mưa nhẹ',hum:85,wind:15,uv:3,x:168,y:148,lat:21.0285,lon:105.8542},
+    {name:'Hải Phòng',apiName:'Haiphong',region:'Miền Bắc',icon:'🌦️',temp:28,desc:'Có mưa',hum:82,wind:18,uv:3,x:192,y:158,lat:20.8449,lon:106.6881},
+    {name:'Quảng Ninh',apiName:'Quang Ninh',region:'Miền Bắc',icon:'⛅',temp:26,desc:'Có mây',hum:78,wind:12,uv:4,x:205,y:145,lat:21.0109,lon:107.1826},
+    {name:'Nam Định',apiName:'Nam Dinh',region:'Miền Bắc',icon:'🌧️',temp:27,desc:'Mưa vừa',hum:86,wind:14,uv:2,x:162,y:165,lat:20.4319,lon:106.1747},
+    {name:'Vinh',apiName:'Vinh',region:'Miền Trung',icon:'⛅',temp:29,desc:'Có mây',hum:74,wind:10,uv:5,x:148,y:215,lat:18.6796,lon:105.6818},
+    {name:'Đồng Hới',apiName:'Dong Hoi',region:'Miền Trung',icon:'🌤️',temp:30,desc:'Ít mây',hum:70,wind:12,uv:6,x:140,y:248,lat:17.4680,lon:106.6000},
+    {name:'Huế',apiName:'Hue',region:'Miền Trung',icon:'🌤️',temp:31,desc:'Ít mây',hum:68,wind:11,uv:6,x:148,y:278,lat:16.4637,lon:107.5909},
+    {name:'Đà Nẵng',apiName:'Da Nang',region:'Miền Trung',icon:'☀️',temp:31,desc:'Nắng đẹp',hum:65,wind:10,uv:7,x:158,y:300,lat:16.0544,lon:108.2022},
+    {name:'Hội An',apiName:'Hoi An',region:'Miền Trung',icon:'☀️',temp:32,desc:'Nắng đẹp',hum:63,wind:9,uv:7,x:162,y:312,lat:15.8801,lon:108.3380},
+    {name:'Quy Nhơn',apiName:'Quy Nhon',region:'Miền Trung',icon:'☀️',temp:33,desc:'Nắng to',hum:60,wind:8,uv:8,x:168,y:352,lat:13.7827,lon:109.1798},
+    {name:'Nha Trang',apiName:'Nha Trang',region:'Miền Trung',icon:'☀️',temp:33,desc:'Nắng đẹp',hum:62,wind:9,uv:8,x:170,y:400,lat:12.2388,lon:109.1967},
+    {name:'Đà Lạt',apiName:'Da Lat',region:'Tây Nguyên',icon:'🌤️',temp:22,desc:'Mát mẻ',hum:75,wind:7,uv:5,x:155,y:425,lat:11.9404,lon:108.4583},
+    {name:'Buôn Ma Thuột',apiName:'Buon Ma Thuot',region:'Tây Nguyên',icon:'⛅',temp:28,desc:'Có mây',hum:72,wind:8,uv:6,x:148,y:410,lat:12.6667,lon:108.0500},
+    {name:'Tp. HCM',apiName:'Ho Chi Minh City',region:'Miền Nam',icon:'⛅',temp:34,desc:'Có mây rải rác',hum:78,wind:12,uv:8,x:145,y:475,lat:10.8231,lon:106.6297},
+    {name:'Cần Thơ',apiName:'Can Tho',region:'Miền Nam',icon:'🌤️',temp:33,desc:'Ít mây',hum:76,wind:10,uv:7,x:132,y:510,lat:10.0452,lon:105.7469},
+    {name:'Cà Mau',apiName:'Ca Mau',region:'Miền Nam',icon:'🌦️',temp:32,desc:'Có mưa',hum:82,wind:11,uv:6,x:110,y:558,lat:9.1778,lon:105.1500},
   ];
 
   let selectedCity = null;
@@ -302,6 +302,56 @@
     btn.classList.add('active');
   }
 
+  const OPENWEATHER_API_KEY = '5d956ed49e280b8e42d187812de46ee7';
+
+  async function loadWeatherData() {
+    const requests = cities.map(async c => {
+      try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${c.lat}&lon=${c.lon}&exclude=minutely,alerts&units=metric&appid=${OPENWEATHER_API_KEY}`);
+        if (!response.ok) return;
+        const data = await response.json();
+        const current = data.current;
+        c.temp = Math.round(current.temp);
+        c.desc = current.weather[0].description;
+        c.hum = current.humidity;
+        c.wind = Math.round(current.wind_speed * 3.6);
+        c.uv = current.uvi !== undefined ? current.uvi : c.uv;
+        c.icon = mapWeatherIcon(current.weather[0].icon);
+      } catch (error) {
+        console.warn('Không thể tải thời tiết cho', c.name, error);
+      }
+    });
+    await Promise.all(requests);
+    renderCityList(cities);
+    renderDots();
+    setUpdateTime();
+  }
+
+  function mapWeatherIcon(icon) {
+    if(!icon) return '☁️';
+    const code = icon.slice(0,2);
+    switch(code) {
+      case '01': return icon.endsWith('d') ? '☀️' : '🌙';
+      case '02': return '⛅';
+      case '03': case '04': return '☁️';
+      case '09': return '🌧️';
+      case '10': return '🌦️';
+      case '11': return '⛈️';
+      case '13': return '❄️';
+      case '50': return '🌫️';
+      default: return '☁️';
+    }
+  }
+
+  function setUpdateTime() {
+    const now = new Date();
+    document.getElementById('updateTime').textContent =
+      'Cập nhật: ' + now.getHours().toString().padStart(2,'0') + ':' +
+      now.getMinutes().toString().padStart(2,'0') + ' ' +
+      now.getDate().toString().padStart(2,'0') + '/' +
+      (now.getMonth()+1).toString().padStart(2,'0') + '/' + now.getFullYear();
+  }
+
   document.getElementById('mapArea').addEventListener('click', function(e) {
     if(e.target === this) {
       document.getElementById('mapPopup').style.display = 'none';
@@ -310,15 +360,9 @@
     }
   });
 
-  const now = new Date();
-  document.getElementById('updateTime').textContent =
-    'Cập nhật: ' + now.getHours().toString().padStart(2,'0') + ':' +
-    now.getMinutes().toString().padStart(2,'0') + ' ' +
-    now.getDate().toString().padStart(2,'0') + '/' +
-    (now.getMonth()+1).toString().padStart(2,'0') + '/' + now.getFullYear();
-
   renderCityList(cities);
   renderDots();
+  loadWeatherData();
 </script>
 
 </body>
