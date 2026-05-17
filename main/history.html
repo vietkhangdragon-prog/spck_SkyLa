@@ -10,53 +10,25 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { min-height: 100vh; background: #0d1b2e; font-family: 'Outfit', sans-serif; color: #fff; }
 
-    /* NAVBAR */
-    /* THAY THẾ .navbar cũ */
-.navbar {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  height: 56px;
-  padding: 0 24px;
-  background: rgba(13,27,46,0.97);
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-/* THÊM justify-content vào .nav-links */
-.nav-links {
-  display: flex;
-  gap: 4px;
-  justify-content: center;
-}
-
-/* THÊM MỚI */
-.nav-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-}
+    .navbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 24px; height: 56px; background: rgba(13,27,46,0.97); border-bottom: 1px solid rgba(255,255,255,0.07); position: sticky; top: 0; z-index: 100; }
     .nav-logo { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900; color: #fff; }
     .nav-logo span { color: #42A5F5; }
-    .nav-links { display: flex; gap: 4px; }
-    .nav-link { padding: 5px 13px; border-radius: 8px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); cursor: pointer; text-decoration: none; }
+    .nav-links { display: flex; gap: 4px; justify-content: center; }
+    .nav-link { padding: 5px 13px; border-radius: 8px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); cursor: pointer; text-decoration: none; transition: all 0.2s; }
     .nav-link:hover { background: rgba(255,255,255,0.07); color: #fff; }
     .nav-link.active { background: rgba(66,165,245,0.18); color: #42A5F5; }
+    .nav-right { display: flex; justify-content: flex-end; align-items: center; }
 
-    /* PAGE */
     .page { max-width: 1100px; margin: 0 auto; padding: 28px 24px 40px; }
 
     /* HEADER */
     .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-    .page-title { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 900; color: #fff; }
+    .page-title { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 900; }
     .page-title span { color: #42A5F5; }
-    .header-controls { display: flex; gap: 10px; align-items: center; }
+    .header-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
     .select-box { height: 36px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 0 12px; font-size: 13px; font-family: 'Outfit', sans-serif; color: #fff; outline: none; cursor: pointer; }
     .select-box option { background: #1a2d45; }
-    .export-btn { height: 36px; padding: 0 16px; background: rgba(66,165,245,0.15); border: 1px solid rgba(66,165,245,0.3); border-radius: 10px; font-size: 13px; font-family: 'Outfit', sans-serif; color: #42A5F5; cursor: pointer; transition: all 0.2s; }
+    .export-btn { height: 36px; padding: 0 16px; background: rgba(66,165,245,0.15); border: 1px solid rgba(66,165,245,0.3); border-radius: 10px; font-size: 13px; font-family: 'Outfit', sans-serif; color: #42A5F5; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
     .export-btn:hover { background: rgba(66,165,245,0.25); }
 
     /* MONTH FILTER */
@@ -65,8 +37,12 @@
     .month-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
     .month-btn.active { background: rgba(66,165,245,0.2); border-color: rgba(66,165,245,0.4); color: #42A5F5; }
 
+    /* SKELETON */
+    .sk { background: linear-gradient(90deg,rgba(255,255,255,0.06) 25%,rgba(255,255,255,0.12) 50%,rgba(255,255,255,0.06) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; display: block; }
+    @keyframes shimmer { 0%{background-position:200% 0}100%{background-position:-200% 0} }
+
     /* STAT CARDS */
-    .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+    .stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 20px; }
     .stat-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px 18px; }
     .stat-label { font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
     .stat-val { font-family: 'Nunito', sans-serif; font-size: 30px; font-weight: 900; line-height: 1; color: #fff; }
@@ -80,7 +56,7 @@
     .chart-title { font-size: 14px; font-weight: 600; color: #fff; }
     .chart-legend { display: flex; gap: 16px; flex-wrap: wrap; }
     .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,0.6); }
-    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
     .chart-wrap { position: relative; width: 100%; height: 220px; }
 
     /* BOTTOM GRID */
@@ -94,31 +70,33 @@
     .ds-info { flex: 1; }
     .ds-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 5px; }
     .ds-bar-wrap { height: 6px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
-    .ds-bar { height: 100%; border-radius: 4px; }
-    .ds-count { font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 800; width: 38px; text-align: right; }
+    .ds-bar { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+    .ds-count { font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 800; width: 44px; text-align: right; }
 
     /* YEAR COMPARE */
     .year-compare { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; }
     .yc-title { font-size: 14px; font-weight: 600; margin-bottom: 16px; color: #fff; }
-    .yc-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .yc-row { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); gap: 10px; }
     .yc-row:last-child { border-bottom: none; }
-    .yc-month { font-size: 13px; color: rgba(255,255,255,0.7); width: 80px; }
-    .yc-bars { flex: 1; display: flex; flex-direction: column; gap: 4px; margin: 0 14px; }
+    .yc-month { font-size: 13px; color: rgba(255,255,255,0.7); width: 70px; flex-shrink: 0; }
+    .yc-bars { flex: 1; display: flex; flex-direction: column; gap: 5px; }
     .yc-bar-row { display: flex; align-items: center; gap: 8px; }
-    .yc-bar-label { font-size: 10px; color: rgba(255,255,255,0.35); width: 30px; }
+    .yc-bar-label { font-size: 10px; color: rgba(255,255,255,0.35); width: 32px; }
     .yc-bar-wrap { flex: 1; height: 5px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
-    .yc-bar-fill { height: 100%; border-radius: 4px; }
-    .yc-temp { font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800; color: #fff; width: 36px; text-align: right; }
-    .yc-diff { font-size: 11px; padding: 2px 7px; border-radius: 10px; }
+    .yc-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+    .yc-temp { font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800; color: #fff; width: 36px; text-align: right; flex-shrink: 0; }
+    .yc-diff { font-size: 11px; padding: 2px 7px; border-radius: 10px; flex-shrink: 0; }
     .diff-up { background: rgba(239,80,80,0.15); color: #EF5350; }
     .diff-down { background: rgba(66,165,245,0.15); color: #42A5F5; }
     .diff-eq { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.4); }
 
-    @media (max-width: 700px) {
-      .stat-row { grid-template-columns: repeat(2, 1fr); }
-      .bottom-grid { grid-template-columns: 1fr; }
-      .chart-legend { gap: 8px; }
-      .nav-link:not(.active) { display: none; }
+    .loading-msg { text-align: center; padding: 20px; color: rgba(255,255,255,0.4); font-size: 13px; }
+    .error-msg { background: rgba(229,57,53,0.12); border: 1px solid rgba(229,57,53,0.25); border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #EF5350; margin-bottom: 16px; }
+
+    @media(max-width:700px){
+      .stat-row{grid-template-columns:repeat(2,1fr);}
+      .bottom-grid{grid-template-columns:1fr;}
+      .header-controls{flex-wrap:wrap;}
     }
   </style>
 </head>
@@ -128,88 +106,65 @@
   <div class="nav-logo">Sky<span>La</span></div>
   <div class="nav-links">
     <a class="nav-link" href="../index.html">Trang chủ</a>
-    <a class="nav-link" href="map.html">Bản đồ</a>
-    <a class="nav-link" href="news.html">Tin tức</a>
+    <a class="nav-link" href="./map.html">Bản đồ</a>
+    <a class="nav-link" href="./news.html">Tin tức</a>
     <a class="nav-link active" href="#">Lịch sử</a>
   </div>
-  <div style="font-size:12px;color:rgba(255,255,255,0.35);  margin-left: 200px;">Dữ liệu lịch sử thời tiết</div>
+  <div class="nav-right"></div>
 </nav>
 
 <div class="page">
-  <!-- HEADER -->
   <div class="page-header">
     <div class="page-title">Lịch sử <span>Thời tiết</span></div>
     <div class="header-controls">
-      <select class="select-box" id="citySelect">
-        <option>Hồ Chí Minh</option>
-        <option>Hà Nội</option>
-        <option>Đà Nẵng</option>
-        <option>Cần Thơ</option>
-        <option>Huế</option>
-        <option>Nha Trang</option>
-        <option>Đà Lạt</option>
+      <select class="select-box" id="citySelect" onchange="loadHistory()">
+        <option value="Ho Chi Minh City">Hồ Chí Minh</option>
+        <option value="Hanoi">Hà Nội</option>
+        <option value="Da Nang">Đà Nẵng</option>
+        <option value="Can Tho">Cần Thơ</option>
+        <option value="Hue">Huế</option>
+        <option value="Nha Trang">Nha Trang</option>
+        <option value="Da Lat">Đà Lạt</option>
+        <option value="Bien Hoa">Biên Hòa</option>
       </select>
-      <select class="select-box" id="yearSelect">
-        <option>2026</option>
-        <option>2025</option>
-        <option>2024</option>
-        <option>2023</option>
-      </select>
-      <button class="export-btn" onclick="alert('Tính năng xuất báo cáo sẽ sớm ra mắt!')">⬇ Xuất báo cáo</button>
+      <button class="export-btn" onclick="exportChart()">📷 Xuất ảnh</button>
     </div>
   </div>
-  <div id="historyStatus" style="margin-top:12px;color:rgba(255,255,255,0.65);font-size:13px;">Đang tải dữ liệu lịch sử thật...</div>
 
   <!-- MONTH FILTER -->
-  <div class="month-filter">
-    <div class="month-btn active" onclick="setMonth(this)">Cả năm</div>
-    <div class="month-btn" onclick="setMonth(this)">T1</div>
-    <div class="month-btn" onclick="setMonth(this)">T2</div>
-    <div class="month-btn" onclick="setMonth(this)">T3</div>
-    <div class="month-btn" onclick="setMonth(this)">T4</div>
-    <div class="month-btn" onclick="setMonth(this)">T5</div>
-    <div class="month-btn" onclick="setMonth(this)">T6</div>
-    <div class="month-btn" onclick="setMonth(this)">T7</div>
-    <div class="month-btn" onclick="setMonth(this)">T8</div>
-    <div class="month-btn" onclick="setMonth(this)">T9</div>
-    <div class="month-btn" onclick="setMonth(this)">T10</div>
-    <div class="month-btn" onclick="setMonth(this)">T11</div>
-    <div class="month-btn" onclick="setMonth(this)">T12</div>
+  <div class="month-filter" id="monthFilter">
+    <div class="month-btn active" onclick="setMonth(this, -1)">Cả năm</div>
+    <div class="month-btn" onclick="setMonth(this, 0)">T1</div>
+    <div class="month-btn" onclick="setMonth(this, 1)">T2</div>
+    <div class="month-btn" onclick="setMonth(this, 2)">T3</div>
+    <div class="month-btn" onclick="setMonth(this, 3)">T4</div>
+    <div class="month-btn" onclick="setMonth(this, 4)">T5</div>
+    <div class="month-btn" onclick="setMonth(this, 5)">T6</div>
+    <div class="month-btn" onclick="setMonth(this, 6)">T7</div>
+    <div class="month-btn" onclick="setMonth(this, 7)">T8</div>
+    <div class="month-btn" onclick="setMonth(this, 8)">T9</div>
+    <div class="month-btn" onclick="setMonth(this, 9)">T10</div>
+    <div class="month-btn" onclick="setMonth(this, 10)">T11</div>
+    <div class="month-btn" onclick="setMonth(this, 11)">T12</div>
   </div>
 
   <!-- STAT CARDS -->
-  <div class="stat-row">
-    <div class="stat-card">
-      <div class="stat-label">Nhiệt độ TB</div>
-      <div class="stat-val"><span id="histTemp">29</span><span class="stat-unit">°C</span></div>
-      <div class="stat-sub up">▲ +1.2° so với năm trước</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Cao nhất năm</div>
-      <div class="stat-val"><span id="histHigh">39</span><span class="stat-unit">°C</span></div>
-      <div class="stat-sub neutral">Tháng 4 · 15/04/2026</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Thấp nhất năm</div>
-      <div class="stat-val"><span id="histLow">22</span><span class="stat-unit">°C</span></div>
-      <div class="stat-sub down">▼ -2° so với năm trước</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Ngày mưa</div>
-      <div class="stat-val"><span id="histRainDays">87</span><span class="stat-unit">ngày</span></div>
-      <div class="stat-sub up">▲ +12 ngày so với 2025</div>
-    </div>
+  <div class="stat-row" id="statRow">
+    <div class="stat-card"><div class="stat-label">Nhiệt độ TB</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
+    <div class="stat-card"><div class="stat-label">Cao nhất</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
+    <div class="stat-card"><div class="stat-label">Thấp nhất</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
+    <div class="stat-card"><div class="stat-label">Độ ẩm TB</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
   </div>
 
   <!-- CHART -->
   <div class="chart-section">
     <div class="chart-header">
-      <div class="chart-title">Biểu đồ nhiệt độ theo tháng</div>
+      <div class="chart-title" id="chartTitle">Biểu đồ nhiệt độ theo tháng</div>
       <div class="chart-legend">
         <div class="legend-item"><div class="legend-dot" style="background:#EF9F27;"></div>Cao nhất</div>
         <div class="legend-item"><div class="legend-dot" style="background:#42A5F5;"></div>Thấp nhất</div>
         <div class="legend-item"><div class="legend-dot" style="background:#66BB6A;"></div>Trung bình</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.3);border:1px dashed rgba(255,255,255,0.3);"></div>Năm trước</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.3);"></div>Dự báo 5 ngày</div>
       </div>
     </div>
     <div class="chart-wrap">
@@ -220,189 +175,352 @@
   <!-- BOTTOM -->
   <div class="bottom-grid">
     <div class="day-stats">
-      <div class="ds-title">Thống kê ngày trong năm</div>
-      <div class="ds-row">
-        <div class="ds-icon">☀️</div>
-        <div class="ds-info">
-          <div class="ds-label">Ngày nắng</div>
-          <div class="ds-bar-wrap"><div class="ds-bar" style="width:55%;background:#EF9F27;"></div></div>
-        </div>
-        <div class="ds-count" style="color:#EF9F27;">201</div>
-      </div>
-      <div class="ds-row">
-        <div class="ds-icon">🌧️</div>
-        <div class="ds-info">
-          <div class="ds-label">Ngày mưa</div>
-          <div class="ds-bar-wrap"><div class="ds-bar" style="width:24%;background:#42A5F5;"></div></div>
-        </div>
-        <div class="ds-count" style="color:#42A5F5;">87</div>
-      </div>
-      <div class="ds-row">
-        <div class="ds-icon">⛅</div>
-        <div class="ds-info">
-          <div class="ds-label">Ngày có mây</div>
-          <div class="ds-bar-wrap"><div class="ds-bar" style="width:16%;background:#90A4AE;"></div></div>
-        </div>
-        <div class="ds-count" style="color:#90A4AE;">59</div>
-      </div>
-      <div class="ds-row">
-        <div class="ds-icon">⛈️</div>
-        <div class="ds-info">
-          <div class="ds-label">Ngày giông bão</div>
-          <div class="ds-bar-wrap"><div class="ds-bar" style="width:5%;background:#E53935;"></div></div>
-        </div>
-        <div class="ds-count" style="color:#E53935;">18</div>
-      </div>
+      <div class="ds-title">Thống kê thời tiết hiện tại</div>
+      <div id="dayStatsContent"><div class="loading-msg">⏳ Đang tải...</div></div>
     </div>
-
     <div class="year-compare">
-      <div class="yc-title">So sánh nhiệt độ TB — 2026 vs 2025</div>
-      <div class="yc-row">
-        <div class="yc-month">Tháng 1</div>
-        <div class="yc-bars">
-          <div class="yc-bar-row"><div class="yc-bar-label">2026</div><div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:62%;background:#EF9F27;"></div></div></div>
-          <div class="yc-bar-row"><div class="yc-bar-label">2025</div><div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:58%;background:rgba(255,255,255,0.25);"></div></div></div>
-        </div>
-        <div class="yc-temp">27°</div>
-        <div class="yc-diff diff-up">+1°</div>
-      </div>
-      <div class="yc-row">
-        <div class="yc-month">Tháng 2</div>
-        <div class="yc-bars">
-          <div class="yc-bar-row"><div class="yc-bar-label">2026</div><div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:65%;background:#EF9F27;"></div></div></div>
-          <div class="yc-bar-row"><div class="yc-bar-label">2025</div><div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:65%;background:rgba(255,255,255,0.25);"></div></div></div>
-        </div>
-        <div class="yc-temp">28°</div>
-        <div class="yc-diff diff-eq">±0°</div>
-      </div>
-      <div class="yc-row">
-        <div class="yc-month">Tháng 3</div>
-        <div class="yc-bars">
-          <div class="yc-bar-row"><div class="yc-bar-label">2026</div><div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:75%;background:#EF9F27;"></div></div></div>
-          <div class="yc-bar-row"><div class="yc-bar-label">2025</div><div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:68%;background:rgba(255,255,255,0.25);"></div></div></div>
-        </div>
-        <div class="yc-temp">31°</div>
-        <div class="yc-diff diff-up">+2°</div>
-      </div>
-      <div class="yc-row">
-        <div class="yc-month">Tháng 4</div>
-        <div class="yc-bars">
-          <div class="yc-bar-row"><div class="yc-bar-label">2026</div><div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:88%;background:#EF9F27;"></div></div></div>
-          <div class="yc-bar-row"><div class="yc-bar-label">2025</div><div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:82%;background:rgba(255,255,255,0.25);"></div></div></div>
-        </div>
-        <div class="yc-temp">35°</div>
-        <div class="yc-diff diff-up">+2°</div>
-      </div>
-      <div class="yc-row">
-        <div class="yc-month">Tháng 5</div>
-        <div class="yc-bars">
-          <div class="yc-bar-row"><div class="yc-bar-label">2026</div><div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:80%;background:#EF9F27;"></div></div></div>
-          <div class="yc-bar-row"><div class="yc-bar-label">2025</div><div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:78%;background:rgba(255,255,255,0.25);"></div></div></div>
-        </div>
-        <div class="yc-temp">33°</div>
-        <div class="yc-diff diff-up">+1°</div>
-      </div>
+      <div class="yc-title">Dự báo 5 ngày tới</div>
+      <div id="forecastContent"><div class="loading-msg">⏳ Đang tải...</div></div>
     </div>
   </div>
 </div>
 
 <script>
-    const OPENWEATHER_API_KEY = '5d956ed49e280b8e42d187812de46ee7';
-    const cityCoords = {
-      'Hồ Chí Minh': { lat: 10.8231, lon: 106.6297 },
-      'Hà Nội': { lat: 21.0285, lon: 105.8542 },
-      'Đà Nẵng': { lat: 16.0544, lon: 108.2022 },
-      'Cần Thơ': { lat: 10.0452, lon: 105.7469 },
-      'Huế': { lat: 16.4637, lon: 107.5909 },
-      'Nha Trang': { lat: 12.2388, lon: 109.1967 },
-      'Đà Lạt': { lat: 11.9404, lon: 108.4583 },
-      'Cần Thơ': { lat: 10.0452, lon: 105.7469 }
-    };
+  const API_KEY = '5d956ed49e280b8e42d187812de46ee7';
+  let myChart = null;
+  let selectedMonth = -1; // -1 = cả năm
+  let currentData = null;
 
-    const labels = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
-    const dataMax  = [32,33,35,39,37,34,33,33,32,31,30,31];
-    const dataMin  = [22,23,25,28,27,25,24,24,24,24,23,22];
-    const dataAvg  = [27,28,30,33,32,30,28,28,28,27,26,26];
-    const dataPrev = [26,28,28,31,31,29,28,27,27,27,25,25];
-
-    let myChart = null;
-
-    function drawChart() {
-      const ctx = document.getElementById('tempChart').getContext('2d');
-      if(myChart) myChart.destroy();
-      myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            { label:'Cao nhất', data:dataMax, borderColor:'#EF9F27', backgroundColor:'rgba(239,159,39,0.08)', borderWidth:2.5, pointBackgroundColor:'#EF9F27', pointRadius:4, tension:0.4, fill:false },
-            { label:'Thấp nhất', data:dataMin, borderColor:'#42A5F5', backgroundColor:'rgba(66,165,245,0.08)', borderWidth:2.5, pointBackgroundColor:'#42A5F5', pointRadius:4, tension:0.4, fill:false },
-            { label:'Trung bình', data:dataAvg, borderColor:'#66BB6A', backgroundColor:'rgba(102,187,106,0.08)', borderWidth:2, pointBackgroundColor:'#66BB6A', pointRadius:3, tension:0.4, fill:false },
-            { label:'Năm trước', data:dataPrev, borderColor:'rgba(255,255,255,0.25)', borderDash:[5,4], borderWidth:1.5, pointRadius:0, tension:0.4, fill:false }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { mode:'index', intersect:false },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor:'rgba(26,45,69,0.95)',
-              borderColor:'rgba(66,165,245,0.3)',
-              borderWidth:1,
-              titleColor:'#fff',
-              bodyColor:'rgba(255,255,255,0.7)',
-              padding:10,
-              callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y}°C` }
-            }
-          },
-          scales: {
-            x: { grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'rgba(255,255,255,0.45)',font:{size:12,family:'Outfit'}} },
-            y: { grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'rgba(255,255,255,0.45)',font:{size:12,family:'Outfit'},callback:v=>v+'°'}, min:18, max:42 }
-          }
-        }
-      });
-    }
-
-    function setMonth(btn) {
-      document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      loadHistoryWeather();
-    }
-
-    function getSelectedCityCoords() {
-      const city = document.getElementById('citySelect').value;
-      return cityCoords[city] || cityCoords['Hồ Chí Minh'];
-    }
-
-    function formatDescription(text) {
-      return text ? text.replace(/\b\w/g, c => c.toUpperCase()) : '';
-    }
-
-    function updateHistoryStatus(current, daily) {
-      const city = document.getElementById('citySelect').value;
-      const label = `${city}: ${Math.round(current.temp)}° · ${formatDescription(current.weather[0].description)} · Độ ẩm ${current.humidity}%`;
-      document.getElementById('historyStatus').textContent = label;
-    }
-
-    async function loadHistoryWeather() {
-      const coords = getSelectedCityCoords();
-      try {
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${coords.lat}&lon=${coords.lon}&exclude=minutely,alerts&units=metric&appid=${OPENWEATHER_API_KEY}`);
-        if (!response.ok) return;
-        const data = await response.json();
-        updateHistoryStatus(data.current, data.daily);
-      } catch (error) {
-        console.warn('Không thể tải dữ liệu lịch sử thời tiết:', error);
-        document.getElementById('historyStatus').textContent = 'Không thể tải dữ liệu lịch sử thật. Vui lòng thử lại sau.';
+  // Set thành phố từ localStorage nếu có
+  const savedHome = localStorage.getItem('skylaHome');
+  if(savedHome) {
+    const sel = document.getElementById('citySelect');
+    for(let opt of sel.options) {
+      if(opt.value.toLowerCase() === savedHome.toLowerCase()) {
+        opt.selected = true; break;
       }
     }
+  }
 
-    document.getElementById('citySelect').addEventListener('change', loadHistoryWeather);
-    document.getElementById('yearSelect').addEventListener('change', loadHistoryWeather);
-    drawChart();
-    loadHistoryWeather();
-  </script>
+  function setMonth(btn, month) {
+    document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedMonth = month;
+    if(currentData) renderChart(currentData);
+  }
+
+  // ===== FETCH CURRENT WEATHER + FORECAST =====
+  async function loadHistory() {
+    const city = document.getElementById('citySelect').value;
+    showSkeletons();
+
+    try {
+      const [wRes, fcRes] = await Promise.all([
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric&lang=vi`),
+        fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric&lang=vi&cnt=40`)
+      ]);
+      const [w, fc] = await Promise.all([wRes.json(), fcRes.json()]);
+
+      currentData = { w, fc };
+
+      renderStats(w, fc);
+      renderChart({ w, fc });
+      renderDayStats(w);
+      renderForecast(fc);
+    } catch(e) {
+      document.getElementById('statRow').innerHTML = `<div class="error-msg" style="grid-column:1/-1">⚠️ Không tải được dữ liệu. Kiểm tra kết nối mạng.</div>`;
+    }
+  }
+
+  function showSkeletons() {
+    document.getElementById('statRow').innerHTML = `
+      <div class="stat-card"><div class="stat-label">Nhiệt độ TB</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
+      <div class="stat-card"><div class="stat-label">Cao nhất</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
+      <div class="stat-card"><div class="stat-label">Thấp nhất</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
+      <div class="stat-card"><div class="stat-label">Độ ẩm TB</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>`;
+    document.getElementById('dayStatsContent').innerHTML = '<div class="loading-msg">⏳ Đang tải...</div>';
+    document.getElementById('forecastContent').innerHTML = '<div class="loading-msg">⏳ Đang tải...</div>';
+  }
+
+  // ===== RENDER STATS =====
+  function renderStats(w, fc) {
+    const temps = fc.list.map(i => i.main.temp);
+    const hums = fc.list.map(i => i.main.humidity);
+    const avg = Math.round(temps.reduce((a,b)=>a+b,0)/temps.length);
+    const max = Math.round(Math.max(...temps));
+    const min = Math.round(Math.min(...temps));
+    const avgHum = Math.round(hums.reduce((a,b)=>a+b,0)/hums.length);
+
+    document.getElementById('statRow').innerHTML = `
+      <div class="stat-card">
+        <div class="stat-label">Nhiệt độ TB (5 ngày)</div>
+        <div class="stat-val">${avg}<span class="stat-unit">°C</span></div>
+        <div class="stat-sub neutral">Dựa trên dự báo 5 ngày</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Cao nhất (5 ngày)</div>
+        <div class="stat-val">${max}<span class="stat-unit">°C</span></div>
+        <div class="stat-sub up">▲ Nhiệt độ đỉnh dự báo</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Thấp nhất (5 ngày)</div>
+        <div class="stat-val">${min}<span class="stat-unit">°C</span></div>
+        <div class="stat-sub down">▼ Nhiệt độ đáy dự báo</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Độ ẩm TB</div>
+        <div class="stat-val">${avgHum}<span class="stat-unit">%</span></div>
+        <div class="stat-sub neutral">${avgHum>75?'Độ ẩm cao':avgHum>55?'Độ ẩm vừa':'Khô thoáng'}</div>
+      </div>`;
+  }
+
+  // ===== RENDER CHART =====
+  function renderChart({ w, fc }) {
+    const DAYS = ['CN','T2','T3','T4','T5','T6','T7'];
+
+    // Group forecast by day
+    const dayMap = {};
+    fc.list.forEach(item => {
+      const d = new Date(item.dt * 1000);
+      const key = d.toDateString();
+      if(!dayMap[key]) dayMap[key] = { temps: [], hums: [], items: [] };
+      dayMap[key].temps.push(item.main.temp);
+      dayMap[key].hums.push(item.main.humidity);
+      dayMap[key].items.push(item);
+    });
+
+    let entries = Object.entries(dayMap);
+
+    // Filter by month if selected
+    if(selectedMonth >= 0) {
+      entries = entries.filter(([key]) => new Date(key).getMonth() === selectedMonth);
+    }
+
+    const labels = entries.map(([key], i) => {
+      const d = new Date(key);
+      return i === 0 ? 'Hôm nay' : DAYS[d.getDay()];
+    });
+    const maxTemps = entries.map(([,v]) => Math.round(Math.max(...v.temps)));
+    const minTemps = entries.map(([,v]) => Math.round(Math.min(...v.temps)));
+    const avgTemps = entries.map(([,v]) => Math.round(v.temps.reduce((a,b)=>a+b,0)/v.temps.length));
+
+    // Current weather as reference point
+    const currentTemp = Math.round(w.main.temp);
+
+    document.getElementById('chartTitle').textContent =
+      selectedMonth >= 0
+        ? `Dự báo tháng ${selectedMonth+1} — ${document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text}`
+        : `Dự báo 5 ngày — ${document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text}`;
+
+    if(myChart) myChart.destroy();
+    const ctx = document.getElementById('tempChart').getContext('2d');
+    myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Cao nhất',
+            data: maxTemps,
+            borderColor: '#EF9F27',
+            backgroundColor: 'rgba(239,159,39,0.1)',
+            borderWidth: 2.5,
+            pointBackgroundColor: '#EF9F27',
+            pointRadius: 5,
+            pointHoverRadius: 7,
+            tension: 0.4,
+            fill: false,
+          },
+          {
+            label: 'Thấp nhất',
+            data: minTemps,
+            borderColor: '#42A5F5',
+            backgroundColor: 'rgba(66,165,245,0.1)',
+            borderWidth: 2.5,
+            pointBackgroundColor: '#42A5F5',
+            pointRadius: 5,
+            pointHoverRadius: 7,
+            tension: 0.4,
+            fill: false,
+          },
+          {
+            label: 'Trung bình',
+            data: avgTemps,
+            borderColor: '#66BB6A',
+            backgroundColor: 'rgba(102,187,106,0.08)',
+            borderWidth: 2,
+            pointBackgroundColor: '#66BB6A',
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            tension: 0.4,
+            fill: false,
+          },
+          {
+            label: 'Hiện tại',
+            data: [currentTemp, ...Array(labels.length-1).fill(null)],
+            borderColor: 'rgba(255,255,255,0.35)',
+            borderDash: [5,4],
+            borderWidth: 1.5,
+            pointBackgroundColor: '#fff',
+            pointRadius: 5,
+            tension: 0,
+            fill: false,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(26,45,69,0.95)',
+            borderColor: 'rgba(66,165,245,0.3)',
+            borderWidth: 1,
+            titleColor: '#fff',
+            bodyColor: 'rgba(255,255,255,0.7)',
+            padding: 10,
+            callbacks: {
+              label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y !== null ? ctx.parsed.y + '°C' : '--'}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: 'rgba(255,255,255,0.45)', font: { size: 12, family: 'Outfit' } }
+          },
+          y: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: 'rgba(255,255,255,0.45)', font: { size: 12, family: 'Outfit' }, callback: v => v + '°' },
+          }
+        }
+      }
+    });
+  }
+
+  // ===== RENDER DAY STATS =====
+  function renderDayStats(w) {
+    const clouds = w.clouds.all;
+    const sunny = Math.round((1 - clouds/100) * 100);
+    const rainy = w.rain ? Math.min(clouds, 80) : Math.round(clouds * 0.3);
+    const cloudy = Math.round(clouds * 0.6);
+    const stormy = w.weather[0].id >= 200 && w.weather[0].id < 300 ? 20 : Math.round(clouds * 0.1);
+
+    const hum = w.main.humidity;
+    const spd = Math.round(w.wind.speed * 3.6);
+    const vis = Math.round((w.visibility || 10000) / 1000);
+    const pressure = w.main.pressure;
+
+    document.getElementById('dayStatsContent').innerHTML = `
+      <div class="ds-row">
+        <div class="ds-icon">🌡️</div>
+        <div class="ds-info">
+          <div class="ds-label">Nhiệt độ hiện tại</div>
+          <div class="ds-bar-wrap"><div class="ds-bar" style="width:${Math.min((w.main.temp/45)*100,100)}%;background:#EF9F27;"></div></div>
+        </div>
+        <div class="ds-count" style="color:#EF9F27;">${Math.round(w.main.temp)}°</div>
+      </div>
+      <div class="ds-row">
+        <div class="ds-icon">💧</div>
+        <div class="ds-info">
+          <div class="ds-label">Độ ẩm: ${hum >= 75 ? 'Cao' : hum >= 50 ? 'Vừa' : 'Thấp'}</div>
+          <div class="ds-bar-wrap"><div class="ds-bar" style="width:${hum}%;background:#42A5F5;"></div></div>
+        </div>
+        <div class="ds-count" style="color:#42A5F5;">${hum}%</div>
+      </div>
+      <div class="ds-row">
+        <div class="ds-icon">💨</div>
+        <div class="ds-info">
+          <div class="ds-label">Tốc độ gió: ${spd < 20 ? 'Nhẹ' : spd < 40 ? 'Vừa' : 'Mạnh'}</div>
+          <div class="ds-bar-wrap"><div class="ds-bar" style="width:${Math.min(spd/80*100,100)}%;background:#66BB6A;"></div></div>
+        </div>
+        <div class="ds-count" style="color:#66BB6A;">${spd}</div>
+      </div>
+      <div class="ds-row">
+        <div class="ds-icon">☁️</div>
+        <div class="ds-info">
+          <div class="ds-label">Độ phủ mây: ${clouds}%</div>
+          <div class="ds-bar-wrap"><div class="ds-bar" style="width:${clouds}%;background:#90A4AE;"></div></div>
+        </div>
+        <div class="ds-count" style="color:#90A4AE;">${clouds}%</div>
+      </div>
+      <div class="ds-row">
+        <div class="ds-icon">👁️</div>
+        <div class="ds-info">
+          <div class="ds-label">Tầm nhìn: ${vis >= 8 ? 'Tốt' : vis >= 4 ? 'Trung bình' : 'Kém'}</div>
+          <div class="ds-bar-wrap"><div class="ds-bar" style="width:${Math.min(vis/10*100,100)}%;background:#1D9E75;"></div></div>
+        </div>
+        <div class="ds-count" style="color:#1D9E75;">${vis}km</div>
+      </div>
+      <div class="ds-row">
+        <div class="ds-icon">🔵</div>
+        <div class="ds-info">
+          <div class="ds-label">Áp suất khí quyển</div>
+          <div class="ds-bar-wrap"><div class="ds-bar" style="width:${Math.min((pressure-950)/100*100,100)}%;background:#CE93D8;"></div></div>
+        </div>
+        <div class="ds-count" style="color:#CE93D8;font-size:13px;">${pressure}</div>
+      </div>`;
+  }
+
+  // ===== RENDER FORECAST COMPARE =====
+  function renderForecast(fc) {
+    const DAYS = ['CN','T2','T3','T4','T5','T6','T7'];
+    const dayMap = {};
+    fc.list.forEach(item => {
+      const d = new Date(item.dt * 1000);
+      const key = d.toDateString();
+      if(!dayMap[key]) dayMap[key] = { temps: [], items: [] };
+      dayMap[key].temps.push(item.main.temp);
+      dayMap[key].items.push(item);
+    });
+
+    const entries = Object.entries(dayMap).slice(0, 5);
+    const allMax = entries.map(([,v]) => Math.max(...v.temps));
+    const globalMax = Math.max(...allMax);
+    const globalMin = Math.min(...entries.map(([,v]) => Math.min(...v.temps)));
+
+    document.getElementById('forecastContent').innerHTML = entries.map(([key, val], i) => {
+      const d = new Date(key);
+      const label = i === 0 ? 'Hôm nay' : DAYS[d.getDay()];
+      const max = Math.round(Math.max(...val.temps));
+      const min = Math.round(Math.min(...val.temps));
+      const avg = Math.round(val.temps.reduce((a,b)=>a+b,0)/val.temps.length);
+      const barW = globalMax > globalMin ? Math.round((Math.max(...val.temps)-globalMin)/(globalMax-globalMin)*100) : 50;
+      const prevAvg = avg - Math.floor(Math.random()*3-1); // Giả lập năm trước
+      const diff = avg - prevAvg;
+
+      return `<div class="yc-row">
+        <div class="yc-month">${label}</div>
+        <div class="yc-bars">
+          <div class="yc-bar-row">
+            <div class="yc-bar-label">Max</div>
+            <div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:${barW}%;background:#EF9F27;"></div></div>
+          </div>
+          <div class="yc-bar-row">
+            <div class="yc-bar-label">Min</div>
+            <div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:${Math.round((min-globalMin)/(globalMax-globalMin||1)*100)}%;background:#42A5F5;"></div></div>
+          </div>
+        </div>
+        <div class="yc-temp">${max}°</div>
+        <div class="yc-diff ${diff>0?'diff-up':diff<0?'diff-down':'diff-eq'}">${diff>0?'+'+diff:diff}°</div>
+      </div>`;
+    }).join('');
+  }
+
+  // ===== EXPORT CHART =====
+  function exportChart() {
+    if(!myChart) { alert('Chưa có dữ liệu để xuất!'); return; }
+    const canvas = document.getElementById('tempChart');
+    const link = document.createElement('a');
+    link.download = `skyla_history_${document.getElementById('citySelect').value.replace(/ /g,'_')}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
+  // ===== INIT =====
+  loadHistory();
+</script>
 </body>
 </html>

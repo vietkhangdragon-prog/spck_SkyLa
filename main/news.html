@@ -9,51 +9,24 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { min-height: 100vh; background: #0d1b2e; font-family: 'Outfit', sans-serif; color: #fff; }
 
-    /* NAVBAR */
-    /* THAY THẾ .navbar cũ */
-.navbar {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  height: 56px;
-  padding: 0 24px;
-  background: rgba(13,27,46,0.97);
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-/* THÊM justify-content vào .nav-links */
-.nav-links {
-  display: flex;
-  gap: 4px;
-  justify-content: center;
-}
-
-/* THÊM MỚI */
-.nav-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-}
+    .navbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 24px; height: 56px; background: rgba(13,27,46,0.97); border-bottom: 1px solid rgba(255,255,255,0.07); position: sticky; top: 0; z-index: 100; }
     .nav-logo { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900; color: #fff; }
     .nav-logo span { color: #42A5F5; }
-    .nav-links { display: flex; gap: 4px; }
-    .nav-link { padding: 5px 13px; border-radius: 8px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); cursor: pointer; text-decoration: none; }
+    .nav-links { display: flex; gap: 4px; justify-content: center; }
+    .nav-link { padding: 5px 13px; border-radius: 8px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); cursor: pointer; text-decoration: none; transition: all 0.2s; }
     .nav-link:hover { background: rgba(255,255,255,0.07); color: #fff; }
     .nav-link.active { background: rgba(66,165,245,0.18); color: #42A5F5; }
-    .nav-search { position: relative; }
-    .nav-search input { height: 34px; width: 220px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 0 14px 0 34px; font-size: 13px; font-family: 'Outfit', sans-serif; color: #fff; outline: none; }
-    .nav-search input::placeholder { color: rgba(255,255,255,0.3); }
-    .si { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 12px; opacity: 0.4; }
+    .nav-right { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
+    .nav-search-wrap { position: relative; }
+    .nav-search-input { width: 200px; height: 34px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 0 14px 0 34px; font-size: 13px; font-family: 'Outfit', sans-serif; color: #fff; outline: none; }
+    .nav-search-input::placeholder { color: rgba(255,255,255,0.3); }
+    .nav-search-input:focus { border-color: rgba(66,165,245,0.5); }
+    .nav-si { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 12px; opacity: 0.4; }
 
-    /* PAGE */
-    .page { max-width: 1100px; margin: 0 auto; padding: 28px 24px; }
+    .page { max-width: 1100px; margin: 0 auto; padding: 28px 24px 40px; }
 
-    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-    .page-title { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 900; color: #fff; }
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+    .page-title { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 900; }
     .page-title span { color: #42A5F5; }
     .update-badge { font-size: 12px; color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 4px 12px; }
 
@@ -63,25 +36,31 @@
     .filter-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
     .filter-btn.active { background: rgba(66,165,245,0.2); border-color: rgba(66,165,245,0.4); color: #42A5F5; }
     .filter-btn.urgent-btn { background: rgba(229,57,53,0.1); border-color: rgba(229,57,53,0.25); color: #EF5350; }
-    .filter-btn.urgent-btn.active { background: rgba(229,57,53,0.22); border-color: rgba(229,57,53,0.45); }
+    .filter-btn.urgent-btn.active { background: rgba(229,57,53,0.22); }
+
+    /* SKELETON */
+    .sk { background: linear-gradient(90deg,rgba(255,255,255,0.06) 25%,rgba(255,255,255,0.12) 50%,rgba(255,255,255,0.06) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; display: block; }
+    @keyframes shimmer { 0%{background-position:200% 0}100%{background-position:-200% 0} }
 
     /* FEATURED */
     .featured { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; margin-bottom: 24px; }
-
-    .news-featured { border-radius: 16px; overflow: hidden; position: relative; cursor: pointer; min-height: 280px; }
-    .featured-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #1a3a5c 0%, #0d47a1 50%, #1565C0 100%); }
-    .featured-deco { position: absolute; top: 20px; right: 20px; font-size: 80px; opacity: 0.15; }
+    .news-featured { border-radius: 16px; overflow: hidden; position: relative; cursor: pointer; min-height: 280px; text-decoration: none; display: block; }
+    .news-featured:hover .featured-overlay { opacity: 1; }
+    .featured-bg { position: absolute; inset: 0; background: linear-gradient(135deg,#1a3a5c,#0d47a1,#1565C0); }
+    .featured-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.25; }
+    .featured-overlay { position: absolute; inset: 0; background: rgba(66,165,245,0.08); opacity: 0; transition: opacity 0.2s; }
+    .featured-deco { position: absolute; top: 20px; right: 20px; font-size: 70px; opacity: 0.12; }
     .featured-body { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; }
     .urgent-tag { display: inline-flex; align-items: center; gap: 5px; background: #E53935; border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 600; color: #fff; margin-bottom: 8px; }
     .tag-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; animation: blink 1s infinite; }
-    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-    .featured-title { font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 800; color: #fff; line-height: 1.35; margin-bottom: 8px; }
-    .featured-meta { font-size: 11px; color: rgba(255,255,255,0.5); display: flex; gap: 12px; }
+    @keyframes blink { 0%,100%{opacity:1;}50%{opacity:0.3;} }
+    .featured-title { font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 800; color: #fff; line-height: 1.35; margin-bottom: 8px; }
+    .featured-meta { font-size: 11px; color: rgba(255,255,255,0.5); display: flex; gap: 12px; flex-wrap: wrap; }
 
     .featured-side { display: flex; flex-direction: column; gap: 12px; }
-    .side-news { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; cursor: pointer; transition: background 0.2s; display: flex; gap: 12px; }
+    .side-news { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; cursor: pointer; transition: background 0.2s; display: flex; gap: 12px; text-decoration: none; }
     .side-news:hover { background: rgba(255,255,255,0.08); }
-    .side-news-icon { font-size: 28px; flex-shrink: 0; }
+    .side-news-icon { font-size: 26px; flex-shrink: 0; }
     .side-news-body { flex: 1; }
     .side-tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px; display: inline-block; margin-bottom: 5px; }
     .tag-vn { background: rgba(66,165,245,0.2); color: #42A5F5; }
@@ -90,28 +69,28 @@
     .side-news-title { font-size: 13px; font-weight: 500; color: #fff; line-height: 1.4; margin-bottom: 4px; }
     .side-news-meta { font-size: 11px; color: rgba(255,255,255,0.4); }
 
-    /* GRID */
+    /* NEWS GRID */
     .section-label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-    .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+    .section-label::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.07); }
 
     .news-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 32px; }
-
-    .news-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; overflow: hidden; cursor: pointer; transition: all 0.2s; }
+    .news-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; overflow: hidden; cursor: pointer; transition: all 0.2s; text-decoration: none; display: block; }
     .news-card:hover { background: rgba(255,255,255,0.07); transform: translateY(-2px); }
     .news-card.is-urgent { border-color: rgba(229,57,53,0.3); background: rgba(229,57,53,0.05); }
     .news-card-top { padding: 14px 14px 10px; display: flex; align-items: flex-start; gap: 10px; }
-    .nc-icon { font-size: 30px; flex-shrink: 0; }
+    .nc-icon { font-size: 28px; flex-shrink: 0; }
     .nc-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 6px; }
     .nc-title { font-size: 13px; font-weight: 500; color: #fff; line-height: 1.45; }
     .news-card-bottom { padding: 8px 14px 12px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center; }
     .nc-source { font-size: 11px; color: rgba(255,255,255,0.4); }
     .nc-time { font-size: 11px; color: rgba(255,255,255,0.35); }
 
-    @media (max-width: 700px) {
-      .featured { grid-template-columns: 1fr; }
-      .news-grid { grid-template-columns: 1fr; }
-      .nav-search { display: none; }
-      .nav-links .nav-link:not(.active) { display: none; }
+    .empty-msg { text-align: center; padding: 40px; color: rgba(255,255,255,0.3); font-size: 14px; grid-column: 1/-1; }
+
+    @media(max-width:700px){
+      .featured{grid-template-columns:1fr;}
+      .news-grid{grid-template-columns:1fr;}
+      .nav-search-wrap{display:none;}
     }
   </style>
 </head>
@@ -125,213 +104,224 @@
     <a class="nav-link active" href="#">Tin tức</a>
     <a class="nav-link" href="./history.html">Lịch sử</a>
   </div>
-  <div class="nav-search" style="margin-left: 200px;">
-    <span class="si">🔍</span>
-    <input type="text" placeholder="Tìm tin tức..." />
-
+  <div class="nav-right">
+    <div class="nav-search-wrap">
+      <span class="nav-si">🔍</span>
+      <input class="nav-search-input" id="navSearch" type="text" placeholder="Tìm tin tức..." oninput="filterNews(this.value)" />
+    </div>
   </div>
 </nav>
 
 <div class="page">
   <div class="page-header">
     <div class="page-title">Tin tức <span>Thời tiết</span></div>
-    <div class="update-badge" id="updateBadge">🕐 Đang tải...</div>
+    <div class="update-badge" id="updateBadge">⏳ Đang tải...</div>
   </div>
 
   <div class="filter-row">
-    <div class="filter-btn active" onclick="setFilter(this)">🌏 Tất cả</div>
-    <div class="filter-btn" onclick="setFilter(this)">🇻🇳 Việt Nam</div>
-    <div class="filter-btn" onclick="setFilter(this)">🌍 Thế giới</div>
-    <div class="filter-btn urgent-btn" onclick="setFilter(this)">🚨 Tin khẩn</div>
+    <div class="filter-btn active" onclick="setFilter('all',this)">🌏 Tất cả</div>
+    <div class="filter-btn" onclick="setFilter('vn',this)">🇻🇳 Việt Nam</div>
+    <div class="filter-btn" onclick="setFilter('world',this)">🌍 Thế giới</div>
+    <div class="filter-btn urgent-btn" onclick="setFilter('urgent',this)">🚨 Tin khẩn</div>
   </div>
 
   <!-- FEATURED -->
-  <div class="featured">
-    <div class="news-featured">
-      <div class="featured-bg"></div>
-      <div class="featured-deco">🌪️</div>
-      <div class="featured-body">
-        <div class="urgent-tag"><span class="tag-dot"></span> Tin khẩn</div>
-        <div class="featured-title">Bão số 3 đang tiến vào vùng biển Đông Bắc, dự kiến đổ bộ tối nay — các tỉnh ven biển cần sơ tán khẩn cấp</div>
-        <div class="featured-meta">
-          <span>📍 Quảng Ninh, Hải Phòng</span>
-          <span>🕐 30 phút trước</span>
-          <span>Nguồn: NCHMF</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="featured-side">
-      <div class="side-news">
-        <div class="side-news-icon">🌧️</div>
-        <div class="side-news-body">
-          <span class="side-tag tag-vn">Việt Nam</span>
-          <div class="side-news-title">Miền Trung tiếp tục mưa lớn diện rộng từ Thanh Hóa đến Thừa Thiên Huế</div>
-          <div class="side-news-meta">VnExpress · 1 giờ trước</div>
-        </div>
-      </div>
-      <div class="side-news">
-        <div class="side-news-icon">☀️</div>
-        <div class="side-news-body">
-          <span class="side-tag tag-vn">Việt Nam</span>
-          <div class="side-news-title">Nam Bộ nắng nóng gay gắt, nhiệt độ có thể lên tới 39°C cuối tuần này</div>
-          <div class="side-news-meta">Tuổi Trẻ · 2 giờ trước</div>
-        </div>
-      </div>
-      <div class="side-news">
-        <div class="side-news-icon">🌊</div>
-        <div class="side-news-body">
-          <span class="side-tag tag-world">Thế giới</span>
-          <div class="side-news-title">Lũ lụt nghiêm trọng tại miền Nam Trung Quốc khiến hàng nghìn người phải di dời</div>
-          <div class="side-news-meta">Reuters · 3 giờ trước</div>
-        </div>
+  <div id="featuredSection">
+    <div class="featured">
+      <div class="sk" style="min-height:280px;border-radius:16px;"></div>
+      <div class="featured-side">
+        <div class="sk" style="height:88px;border-radius:12px;"></div>
+        <div class="sk" style="height:88px;border-radius:12px;"></div>
+        <div class="sk" style="height:88px;border-radius:12px;"></div>
       </div>
     </div>
   </div>
 
-  <!-- NEWS GRID -->
+  <!-- GRID -->
   <div class="section-label">Tin mới nhất</div>
-  <div class="news-grid">
-    <div class="news-card is-urgent">
-      <div class="news-card-top">
-        <div class="nc-icon">⛈️</div>
-        <div>
-          <div class="nc-tags"><span class="side-tag tag-warn">Tin khẩn</span><span class="side-tag tag-vn">Việt Nam</span></div>
-          <div class="nc-title">Cảnh báo lũ quét và sạt lở đất tại các tỉnh miền núi phía Bắc trong 24 giờ tới</div>
-        </div>
-      </div>
-      <div class="news-card-bottom">
-        <span class="nc-source">NCHMF</span>
-        <span class="nc-time">45 phút trước</span>
-      </div>
-    </div>
-
-    <div class="news-card">
-      <div class="news-card-top">
-        <div class="nc-icon">🌤️</div>
-        <div>
-          <div class="nc-tags"><span class="side-tag tag-vn">Việt Nam</span></div>
-          <div class="nc-title">Hà Nội có mưa rào và giông vào chiều tối, trời dịu mát hơn sau đợt nắng nóng kéo dài</div>
-        </div>
-      </div>
-      <div class="news-card-bottom">
-        <span class="nc-source">Dân Trí</span>
-        <span class="nc-time">2 giờ trước</span>
-      </div>
-    </div>
-
-    <div class="news-card">
-      <div class="news-card-top">
-        <div class="nc-icon">🌡️</div>
-        <div>
-          <div class="nc-tags"><span class="side-tag tag-vn">Việt Nam</span></div>
-          <div class="nc-title">El Niño khiến nhiệt độ toàn quốc tăng 1-2°C so với trung bình nhiều năm trong tháng 5</div>
-        </div>
-      </div>
-      <div class="news-card-bottom">
-        <span class="nc-source">VnExpress</span>
-        <span class="nc-time">3 giờ trước</span>
-      </div>
-    </div>
-
-    <div class="news-card">
-      <div class="news-card-top">
-        <div class="nc-icon">🌪️</div>
-        <div>
-          <div class="nc-tags"><span class="side-tag tag-world">Thế giới</span></div>
-          <div class="nc-title">Siêu bão Mawar tăng cấp lên cấp 5 khi tiến vào Thái Bình Dương, đe dọa Philippines</div>
-        </div>
-      </div>
-      <div class="news-card-bottom">
-        <span class="nc-source">AP News</span>
-        <span class="nc-time">4 giờ trước</span>
-      </div>
-    </div>
-
-    <div class="news-card">
-      <div class="news-card-top">
-        <div class="nc-icon">❄️</div>
-        <div>
-          <div class="nc-tags"><span class="side-tag tag-world">Thế giới</span></div>
-          <div class="nc-title">Châu Âu trải qua mùa đông lạnh nhất trong 30 năm, nhiều thành phố chìm trong tuyết dày</div>
-        </div>
-      </div>
-      <div class="news-card-bottom">
-        <span class="nc-source">BBC Weather</span>
-        <span class="nc-time">5 giờ trước</span>
-      </div>
-    </div>
-
-    <div class="news-card">
-      <div class="news-card-top">
-        <div class="nc-icon">🌈</div>
-        <div>
-          <div class="nc-tags"><span class="side-tag tag-vn">Việt Nam</span></div>
-          <div class="nc-title">Đà Lạt bước vào mùa mưa sớm, du khách nên chuẩn bị áo mưa khi đến tham quan</div>
-        </div>
-      </div>
-      <div class="news-card-bottom">
-        <span class="nc-source">Thanh Niên</span>
-        <span class="nc-time">6 giờ trước</span>
-      </div>
-    </div>
-
-    <div class="news-card">
-      <div class="news-card-top">
-        <div class="nc-icon">🌊</div>
-        <div>
-          <div class="nc-tags"><span class="side-tag tag-world">Thế giới</span></div>
-          <div class="nc-title">Biến đổi khí hậu đẩy mực nước biển tăng nhanh hơn dự báo, đe dọa các thành phố ven biển</div>
-        </div>
-      </div>
-      <div class="news-card-bottom">
-        <span class="nc-source">NASA Climate</span>
-        <span class="nc-time">7 giờ trước</span>
-      </div>
-    </div>
-
-    <div class="news-card">
-      <div class="news-card-top">
-        <div class="nc-icon">💨</div>
-        <div>
-          <div class="nc-tags"><span class="side-tag tag-vn">Việt Nam</span></div>
-          <div class="nc-title">Gió mùa Tây Nam hoạt động mạnh, mưa lớn tập trung ở Tây Nguyên và Nam Bộ tuần tới</div>
-        </div>
-      </div>
-      <div class="news-card-bottom">
-        <span class="nc-source">NCHMF</span>
-        <span class="nc-time">8 giờ trước</span>
-      </div>
-    </div>
-
-    <div class="news-card">
-      <div class="news-card-top">
-        <div class="nc-icon">☀️</div>
-        <div>
-          <div class="nc-tags"><span class="side-tag tag-world">Thế giới</span></div>
-          <div class="nc-title">Hạn hán nghiêm trọng tại Đông Phi ảnh hưởng hơn 20 triệu người — LHQ kêu gọi hỗ trợ khẩn</div>
-        </div>
-      </div>
-      <div class="news-card-bottom">
-        <span class="nc-source">UN News</span>
-        <span class="nc-time">9 giờ trước</span>
-      </div>
-    </div>
+  <div class="news-grid" id="newsGrid">
+    <div class="sk" style="height:130px;border-radius:14px;"></div>
+    <div class="sk" style="height:130px;border-radius:14px;"></div>
+    <div class="sk" style="height:130px;border-radius:14px;"></div>
+    <div class="sk" style="height:130px;border-radius:14px;"></div>
+    <div class="sk" style="height:130px;border-radius:14px;"></div>
+    <div class="sk" style="height:130px;border-radius:14px;"></div>
   </div>
 </div>
 
 <script>
-  function setFilter(btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+  // NewsAPI key — miễn phí tại newsapi.org
+  // Lưu ý: NewsAPI free tier chỉ hoạt động trên localhost, không hoạt động trên domain thật
+  // Nếu deploy lên server cần dùng backend proxy hoặc nâng cấp plan
+  const NEWS_API_KEY = 'YOUR_NEWSAPI_KEY'; // Thay bằng key của bạn tại newsapi.org
+
+  // Vì NewsAPI free bị chặn CORS trên browser, mình dùng GNews API (miễn phí, hỗ trợ CORS)
+  // Đăng ký tại: https://gnews.io — miễn phí 100 req/ngày
+  const GNEWS_KEY = 'YOUR_GNEWS_KEY'; // Thay bằng key tại gnews.io
+
+  let allArticles = [];
+  let activeFilter = 'all';
+  let searchQuery = '';
+
+  // Weather keywords để lọc
+  const WEATHER_KEYWORDS = ['thời tiết','mưa','bão','lũ','nắng','nhiệt độ','khí hậu','hạn hán','lốc','áp thấp','gió','sét','tuyết','sương','ngập','lũ lụt','thiên tai','climate','weather','storm','flood','rain','hurricane','typhoon','drought'];
+  const URGENT_KEYWORDS = ['bão số','cảnh báo','khẩn','nguy hiểm','sơ tán','lũ quét','sạt lở','cấp độ','emergency','warning','alert','extreme'];
+  const VN_KEYWORDS = ['việt nam','hà nội','hồ chí minh','đà nẵng','miền bắc','miền nam','miền trung','tây nguyên'];
+
+  function timeAgo(dateStr) {
+    const diff = Math.floor((Date.now() - new Date(dateStr)) / 1000);
+    if(diff < 3600) return Math.floor(diff/60) + ' phút trước';
+    if(diff < 86400) return Math.floor(diff/3600) + ' giờ trước';
+    return Math.floor(diff/86400) + ' ngày trước';
   }
 
-  const now = new Date();
-  document.getElementById('updateBadge').textContent =
-    '🕐 Cập nhật lúc ' +
-    now.getHours().toString().padStart(2,'0') + ':' +
-    now.getMinutes().toString().padStart(2,'0');
-</script>
+  function getArticleIcon(title) {
+    const t = title.toLowerCase();
+    if(t.includes('bão')||t.includes('storm')||t.includes('typhoon')||t.includes('hurricane')) return '🌪️';
+    if(t.includes('lũ')||t.includes('flood')||t.includes('ngập')) return '🌊';
+    if(t.includes('mưa')||t.includes('rain')) return '🌧️';
+    if(t.includes('nắng')||t.includes('nóng')||t.includes('heat')) return '☀️';
+    if(t.includes('tuyết')||t.includes('snow')||t.includes('lạnh')) return '❄️';
+    if(t.includes('sương')||t.includes('fog')||t.includes('mist')) return '🌫️';
+    if(t.includes('giông')||t.includes('sét')||t.includes('thunder')) return '⛈️';
+    if(t.includes('hạn')||t.includes('drought')) return '🏜️';
+    if(t.includes('gió')||t.includes('wind')) return '💨';
+    return '🌡️';
+  }
 
+  function isUrgent(title) {
+    return URGENT_KEYWORDS.some(k => title.toLowerCase().includes(k));
+  }
+
+  function isVN(title, source) {
+    return VN_KEYWORDS.some(k => title.toLowerCase().includes(k)) || (source || '').toLowerCase().includes('vn') || (source || '').toLowerCase().includes('vietnam');
+  }
+
+  function renderFeatured(articles) {
+    if(!articles.length) return;
+    const main = articles[0];
+    const sides = articles.slice(1, 4);
+
+    const mainIsUrgent = isUrgent(main.title);
+    const section = document.getElementById('featuredSection');
+    section.innerHTML = `
+      <div class="featured">
+        <a class="news-featured" href="${main.url}" target="_blank" rel="noopener">
+          <div class="featured-bg"></div>
+          ${main.image ? `<img class="featured-img" src="${main.image}" onerror="this.style.display='none'" />` : ''}
+          <div class="featured-overlay"></div>
+          <div class="featured-deco">${getArticleIcon(main.title)}</div>
+          <div class="featured-body">
+            ${mainIsUrgent ? '<div class="urgent-tag"><span class="tag-dot"></span> Tin khẩn</div>' : ''}
+            <div class="featured-title">${main.title}</div>
+            <div class="featured-meta">
+              <span>📰 ${main.source?.name || 'Báo quốc tế'}</span>
+              <span>🕐 ${timeAgo(main.publishedAt)}</span>
+            </div>
+          </div>
+        </a>
+        <div class="featured-side">
+          ${sides.map(a => `
+            <a class="side-news" href="${a.url}" target="_blank" rel="noopener">
+              <div class="side-news-icon">${getArticleIcon(a.title)}</div>
+              <div class="side-news-body">
+                <span class="side-tag ${isVN(a.title, a.source?.name)?'tag-vn':isUrgent(a.title)?'tag-warn':'tag-world'}">${isVN(a.title,a.source?.name)?'Việt Nam':isUrgent(a.title)?'Tin khẩn':'Thế giới'}</span>
+                <div class="side-news-title">${a.title}</div>
+                <div class="side-news-meta">${a.source?.name||'Báo quốc tế'} · ${timeAgo(a.publishedAt)}</div>
+              </div>
+            </a>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  function renderGrid(articles) {
+    const grid = document.getElementById('newsGrid');
+    if(!articles.length) {
+      grid.innerHTML = '<div class="empty-msg">😕 Không tìm thấy tin tức phù hợp</div>';
+      return;
+    }
+    grid.innerHTML = articles.map(a => {
+      const urgent = isUrgent(a.title);
+      const vn = isVN(a.title, a.source?.name);
+      return `<a class="news-card${urgent?' is-urgent':''}" href="${a.url}" target="_blank" rel="noopener">
+        <div class="news-card-top">
+          <div class="nc-icon">${getArticleIcon(a.title)}</div>
+          <div>
+            <div class="nc-tags">
+              ${urgent?'<span class="side-tag tag-warn">Tin khẩn</span>':''}
+              <span class="side-tag ${vn?'tag-vn':'tag-world'}">${vn?'Việt Nam':'Thế giới'}</span>
+            </div>
+            <div class="nc-title">${a.title}</div>
+          </div>
+        </div>
+        <div class="news-card-bottom">
+          <span class="nc-source">${a.source?.name||'Báo quốc tế'}</span>
+          <span class="nc-time">${timeAgo(a.publishedAt)}</span>
+        </div>
+      </a>`;
+    }).join('');
+  }
+
+  function applyFilters() {
+    let filtered = [...allArticles];
+    if(activeFilter === 'vn') filtered = filtered.filter(a => isVN(a.title, a.source?.name));
+    else if(activeFilter === 'world') filtered = filtered.filter(a => !isVN(a.title, a.source?.name));
+    else if(activeFilter === 'urgent') filtered = filtered.filter(a => isUrgent(a.title));
+    if(searchQuery) filtered = filtered.filter(a => a.title.toLowerCase().includes(searchQuery.toLowerCase()));
+    renderGrid(filtered.slice(4));
+    if(!searchQuery && activeFilter==='all') renderFeatured(allArticles.slice(0,4));
+  }
+
+  function setFilter(f, btn) {
+    activeFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+
+  function filterNews(q) {
+    searchQuery = q;
+    applyFilters();
+  }
+
+  async function loadNews() {
+    // Dùng GNews API (hỗ trợ CORS, miễn phí)
+    // Nếu chưa có key => dùng fallback data
+    try {
+      const url = `https://gnews.io/api/v4/search?q=weather+thời+tiết+bão+lũ&lang=vi&country=vn&max=10&apikey=${GNEWS_KEY}`;
+      const url2 = `https://gnews.io/api/v4/search?q=weather+storm+flood+climate&lang=en&max=10&apikey=${GNEWS_KEY}`;
+
+      if(GNEWS_KEY === 'YOUR_GNEWS_KEY') throw new Error('no key');
+
+      const [r1, r2] = await Promise.all([fetch(url), fetch(url2)]);
+      const [d1, d2] = await Promise.all([r1.json(), r2.json()]);
+      allArticles = [...(d1.articles||[]), ...(d2.articles||[])].sort((a,b)=>new Date(b.publishedAt)-new Date(a.publishedAt));
+    } catch(e) {
+      // Fallback: dữ liệu mẫu khi chưa có API key
+      allArticles = [
+        { title:'Bão số 3 đang tiến vào vùng biển Đông Bắc, dự kiến đổ bộ tối nay — các tỉnh ven biển cần sơ tán khẩn cấp', url:'#', publishedAt: new Date(Date.now()-1800000).toISOString(), source:{name:'NCHMF'}, image:null },
+        { title:'Miền Trung Việt Nam tiếp tục mưa lớn diện rộng từ Thanh Hóa đến Thừa Thiên Huế trong 3 ngày tới', url:'#', publishedAt: new Date(Date.now()-3600000).toISOString(), source:{name:'VnExpress'}, image:null },
+        { title:'Nam Bộ nắng nóng gay gắt, nhiệt độ có thể lên tới 39°C cuối tuần này tại Hồ Chí Minh', url:'#', publishedAt: new Date(Date.now()-7200000).toISOString(), source:{name:'Tuổi Trẻ'}, image:null },
+        { title:'Lũ lụt nghiêm trọng tại miền Nam Trung Quốc khiến hàng nghìn người phải di dời khẩn cấp', url:'#', publishedAt: new Date(Date.now()-10800000).toISOString(), source:{name:'Reuters'}, image:null },
+        { title:'Cảnh báo lũ quét và sạt lở đất tại các tỉnh miền núi phía Bắc Việt Nam trong 24 giờ tới', url:'#', publishedAt: new Date(Date.now()-2700000).toISOString(), source:{name:'NCHMF'}, image:null },
+        { title:'El Niño khiến nhiệt độ toàn cầu tăng kỷ lục — 2026 được dự báo là năm nóng nhất lịch sử', url:'#', publishedAt: new Date(Date.now()-14400000).toISOString(), source:{name:'NASA'}, image:null },
+        { title:'Siêu bão Mawar tăng cấp lên cấp 5 khi tiến vào Thái Bình Dương, đe dọa Philippines và Đài Loan', url:'#', publishedAt: new Date(Date.now()-18000000).toISOString(), source:{name:'AP News'}, image:null },
+        { title:'Đà Lạt Việt Nam bước vào mùa mưa sớm hơn 2 tuần, du khách nên chuẩn bị áo mưa khi tham quan', url:'#', publishedAt: new Date(Date.now()-21600000).toISOString(), source:{name:'Thanh Niên'}, image:null },
+        { title:'Biến đổi khí hậu đẩy mực nước biển toàn cầu tăng nhanh hơn dự báo, đe dọa các thành phố ven biển', url:'#', publishedAt: new Date(Date.now()-25200000).toISOString(), source:{name:'Nature'}, image:null },
+        { title:'Gió mùa Tây Nam hoạt động mạnh, mưa lớn tập trung ở Tây Nguyên và Nam Bộ tuần tới', url:'#', publishedAt: new Date(Date.now()-28800000).toISOString(), source:{name:'NCHMF'}, image:null },
+        { title:'Hạn hán nghiêm trọng tại Đông Phi ảnh hưởng hơn 20 triệu người — LHQ kêu gọi hỗ trợ khẩn', url:'#', publishedAt: new Date(Date.now()-32400000).toISOString(), source:{name:'UN News'}, image:null },
+        { title:'Châu Âu ghi nhận đợt nắng nóng bất thường giữa mùa xuân với nhiệt độ vượt 35°C tại nhiều quốc gia', url:'#', publishedAt: new Date(Date.now()-36000000).toISOString(), source:{name:'BBC Weather'}, image:null },
+      ];
+    }
+
+    renderFeatured(allArticles.slice(0, 4));
+    renderGrid(allArticles.slice(4));
+
+    const now = new Date();
+    document.getElementById('updateBadge').textContent = `🕐 Cập nhật: ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+  }
+
+  loadNews();
+</script>
 </body>
 </html>
