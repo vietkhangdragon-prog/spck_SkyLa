@@ -7,94 +7,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { min-height: 100vh; background: #0d1b2e; font-family: 'Outfit', sans-serif; color: #fff; display: flex; flex-direction: column; }
-
-    .navbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 24px; height: 56px; background: rgba(13,27,46,0.97); border-bottom: 1px solid rgba(255,255,255,0.07); position: sticky; top: 0; z-index: 1000; }
-    .nav-logo { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900; color: #fff; }
-    .nav-logo span { color: #42A5F5; }
-    .nav-links { display: flex; gap: 4px; justify-content: center; }
-    .nav-link { padding: 5px 13px; border-radius: 8px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55); cursor: pointer; text-decoration: none; transition: all 0.2s; }
-    .nav-link:hover { background: rgba(255,255,255,0.07); color: #fff; }
-    .nav-link.active { background: rgba(66,165,245,0.18); color: #42A5F5; }
-    .nav-right { display: flex; align-items: center; justify-content: flex-end; }
-    .update-badge { font-size: 11px; color: rgba(255,255,255,0.35); }
-
-    .map-layout { display: flex; height: calc(100vh - 56px); overflow: hidden; }
-
-    .map-panel { width: 290px; min-width: 290px; max-width: 290px; height: 100%; background: rgba(10,20,38,0.98); border-right: 1px solid rgba(255,255,255,0.07); display: flex; flex-direction: column; overflow: hidden; z-index: 100; }
-    .panel-header { padding: 14px 16px 10px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .panel-title { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-    .panel-badge { font-size: 10px; background: rgba(66,165,245,0.2); color: #42A5F5; padding: 2px 7px; border-radius: 10px; }
-    .search-wrap { position: relative; }
-    .search-wrap input { width: 100%; height: 34px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0 14px 0 34px; font-size: 13px; font-family: 'Outfit', sans-serif; color: #fff; outline: none; }
-    .search-wrap input::placeholder { color: rgba(255,255,255,0.3); }
-    .search-wrap input:focus { border-color: rgba(66,165,245,0.4); }
-    .s-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; opacity: 0.4; }
-
-    .region-tabs { display: flex; gap: 4px; padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.06); overflow-x: auto; }
-    .region-tabs::-webkit-scrollbar { display: none; }
-    .region-tab { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
-    .region-tab:hover { background: rgba(255,255,255,0.1); color: #fff; }
-    .region-tab.active { background: rgba(66,165,245,0.2); border-color: rgba(66,165,245,0.4); color: #42A5F5; }
-
-    .progress-bar { height: 3px; background: rgba(255,255,255,0.06); margin: 0 10px 6px; border-radius: 4px; overflow: hidden; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg,#1976D2,#42A5F5); border-radius: 4px; transition: width 0.3s; }
-
-    .city-list { overflow-y: scroll; flex: 1; min-height: 0; padding: 4px 8px; }
-    .city-list::-webkit-scrollbar { width: 5px; }
-    .city-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
-    .city-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 4px; }
-
-    .city-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; cursor: pointer; transition: background 0.15s; margin-bottom: 1px; border: 1px solid transparent; }
-    .city-item:hover { background: rgba(255,255,255,0.06); }
-    .city-item.selected { background: rgba(66,165,245,0.15); border-color: rgba(66,165,245,0.25); }
-    .ci-icon { font-size: 17px; width: 24px; text-align: center; flex-shrink: 0; }
-    .ci-info { flex: 1; min-width: 0; }
-    .ci-name { font-size: 12px; font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .ci-sub { font-size: 10px; color: rgba(255,255,255,0.35); }
-    .ci-temp { font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 800; flex-shrink: 0; }
-
-    .stats-bar { padding: 7px 12px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.35); flex-wrap: wrap; gap: 4px; }
-    .stats-bar span { color: rgba(255,255,255,0.65); font-weight: 500; }
-
-    .layer-btns { padding: 8px 8px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; gap: 5px; flex-wrap: wrap; }
-    .layer-btn { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.2s; }
-    .layer-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
-    .layer-btn.active { background: rgba(66,165,245,0.2); border-color: rgba(66,165,245,0.4); color: #42A5F5; }
-
-    .map-area { flex: 1; position: relative; }
-    #leafletMap { width: 100%; height: 100%; }
-
-    .leaflet-popup-content-wrapper { background: #1a2d45 !important; border: 1px solid rgba(66,165,245,0.4) !important; border-radius: 12px !important; color: #fff !important; box-shadow: 0 8px 24px rgba(0,0,0,0.5) !important; }
-    .leaflet-popup-tip { background: #1a2d45 !important; }
-    .leaflet-popup-content { margin: 12px 16px !important; min-width: 190px; }
-    .popup-city { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.65); margin-bottom: 2px; }
-    .popup-merged { font-size: 10px; color: rgba(66,165,245,0.8); margin-bottom: 4px; font-style: italic; }
-    .popup-temp { font-family: 'Nunito', sans-serif; font-size: 30px; font-weight: 900; color: #fff; line-height: 1; }
-    .popup-desc { font-size: 11px; color: rgba(255,255,255,0.5); margin: 4px 0 8px; text-transform: capitalize; }
-    .popup-row { display: flex; gap: 12px; flex-wrap: wrap; }
-    .popup-item { font-size: 11px; color: rgba(255,255,255,0.4); }
-    .popup-item span { display: block; font-size: 12px; color: #fff; font-weight: 500; }
-
-    .my-loc-btn { position: absolute; bottom: 90px; right: 14px; width: 40px; height: 40px; background: #1976D2; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 17px; border: 2px solid rgba(66,165,245,0.5); z-index: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
-    .my-loc-btn:hover { background: #1565C0; }
-
-    .legend { position: absolute; bottom: 20px; left: 20px; background: rgba(13,27,46,0.92); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 14px; z-index: 500; }
-    .legend-title { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-    .legend-bar { width: 130px; height: 7px; border-radius: 4px; margin-bottom: 4px; }
-    .legend-labels { display: flex; justify-content: space-between; font-size: 10px; color: rgba(255,255,255,0.5); }
-
-    .loading-msg { font-size: 12px; color: rgba(255,255,255,0.3); padding: 16px; text-align: center; }
-  </style>
+<link rel="stylesheet" href="../css/map.css">
+   
 </head>
 <body>
 
 <nav class="navbar">
   <div class="nav-logo">Sky<span>La</span></div>
   <div class="nav-links">
-    <a class="nav-link" href="../index.html">Trang chủ</a>
+    <a class="nav-link" href="./index.html">Trang chủ</a>
     <a class="nav-link active" href="#">Bản đồ</a>
     <a class="nav-link" href="./news.html">Tin tức</a>
     <a class="nav-link" href="./history.html">Lịch sử</a>

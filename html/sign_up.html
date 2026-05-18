@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyLa — Tạo tài khoản</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/sign_up.css">
+</head>
+<body>
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+
+    <div class="brand">
+      <div class="logo-circle">🌤️</div>
+      <div class="brand-name">Sky<span>La</span></div>
+      <div class="brand-tagline">Thời tiết thông minh cho cuộc sống của bạn</div>
+    </div>
+
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="feature-icon">🗺️</div>
+        <span>Bản đồ thời tiết thế giới tương tác</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📊</div>
+        <span>Dự báo 7 ngày chi tiết</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🏙️</div>
+        <span>So sánh thời tiết nhiều thành phố</span>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📰</div>
+        <span>Tin tức thời tiết cập nhật liên tục</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="form-header">
+      <div class="form-title">Tạo tài khoản</div>
+      <div class="form-subtitle">Tham gia SkyLa để trải nghiệm thời tiết theo cách mới</div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label for="ho">Họ</label>
+        <input type="text" id="ho" placeholder="Nguyễn" />
+      </div>
+      <div class="field">
+        <label for="ten">Tên</label>
+        <input type="text" id="ten" placeholder="Văn A" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="email@example.com" />
+    </div>
+
+    <div class="field">
+      <label for="city">Thành phố của bạn</label>
+      <select id="city">
+        <option value="" disabled selected>— Chọn thành phố —</option>
+        <option>Hồ Chí Minh</option>
+        <option>Hà Nội</option>
+        <option>Đà Nẵng</option>
+        <option>Cần Thơ</option>
+        <option>Hải Phòng</option>
+        <option>Khác...</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="pw">Mật khẩu</label>
+      <div class="password-wrap">
+        <input type="password" id="pw" placeholder="Ít nhất 8 ký tự" />
+        <button class="eye-btn" onclick="togglePw('pw', this)">👁</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="cpw">Xác nhận mật khẩu</label>
+      <div class="password-wrap">
+        <input type="password" id="cpw" placeholder="Nhập lại mật khẩu" />
+        <button class="eye-btn" onclick="togglePw('cpw', this)">👁</button>
+      </div>
+    </div>
+
+    <div class="terms-row">
+      <input type="checkbox" id="terms" />
+      <label for="terms">
+        Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a> và
+        <a href="#">Chính sách bảo mật</a> của SkyLa
+      </label>
+    </div>
+
+    <button class="btn-register">Tạo tài khoản</button>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-text">hoặc</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <button class="btn-google">
+      <div class="google-icon"></div>
+      Đăng ký với Google
+    </button>
+
+    <div class="login-link">
+      Đã có tài khoản? <a href="./login.html">Đăng nhập ngay</a>
+    </div>
+  </div>
+
+  <script>
+    function togglePw(id, btn) {
+      const inp = document.getElementById(id);
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        btn.textContent = '🙈';
+      } else {
+        inp.type = 'password';
+        btn.textContent = '👁';
+      }
+    }
+  </script>
+
+</body>
+</html>

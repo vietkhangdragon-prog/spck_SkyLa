@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyLa — Trang chủ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/index.css">
+</head>
+<body>
+
+<!-- ONBOARDING -->
+<div class="onboarding" id="onboarding">
+  <div class="ob-card">
+    <div class="ob-logo">Sky<span>La</span></div>
+    <div class="ob-tagline">Thời tiết thông minh cho cuộc sống của bạn</div>
+    <div class="ob-icon">🌤️</div>
+    <div class="ob-title">Bạn đang ở thành phố nào?</div>
+    <div class="ob-desc">SkyLa cần biết nơi bạn sống để hiển thị thời tiết chính xác ngay trên trang chủ.</div>
+    <div class="ob-search-wrap">
+      <span class="ob-search-icon">🔍</span>
+      <input class="ob-search-input" id="obInput" type="text" placeholder="Nhập tên thành phố..."
+        autocomplete="off" oninput="onObInput(this.value)" onkeydown="onObKey(event)" />
+      <div class="ob-dropdown" id="obDropdown"></div>
+    </div>
+    <div class="ob-error" id="obError">❌ Không tìm thấy thành phố! Thử lại nhé.</div>
+    <button class="ob-btn" id="obConfirmBtn" onclick="confirmCity()">Xác nhận →</button>
+    <button class="ob-gps-btn" id="obGpsBtn" onclick="useGPS()">📍 Tự động phát hiện vị trí của tôi</button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title">➕ Thêm thành phố</div>
+    <input class="modal-input" id="modalInput" type="text" placeholder="Nhập tên thành phố..."
+      onkeydown="if(event.key==='Enter')addCity()" />
+    <div class="modal-error" id="modalError">❌ Không tìm thấy thành phố này!</div>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="closeModal()">Huỷ</button>
+      <button class="modal-btn confirm" onclick="addCity()">Thêm</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-logo">Sky<span>La</span></div>
+  <div class="nav-links">
+    <a class="nav-link active" href="#">Trang chủ</a>
+    <a class="nav-link" href="./map.html">Bản đồ</a>
+    <a class="nav-link" href="./news.html">Tin tức</a>
+    <a class="nav-link" href="./history.html">Lịch sử</a>
+  </div>
+  <div class="nav-right">
+    <span class="update-time" id="updateTime"></span>
+    <div class="nav-search-wrap">
+      <span class="nav-si">🔍</span>
+      <input class="nav-search-input" id="navSearch" type="text" placeholder="Tìm thành phố..."
+        autocomplete="off" oninput="onNavSearch(this.value)" onkeydown="onNavKey(event)" />
+      <div class="nav-dropdown" id="navDropdown"></div>
+    </div>
+    <div class="unit-toggle">
+      <button class="unit-btn active" id="btnC" onclick="setUnit('metric',this)">°C</button>
+      <button class="unit-btn" id="btnF" onclick="setUnit('imperial',this)">°F</button>
+    </div>
+    <div class="nav-avatar">KV</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-main" id="heroMain">
+    <div class="hero-city"><span class="pin-dot"></span><span id="heroCity">Đang tải...</span></div>
+    <div class="hero-temp" id="heroTemp"><span class="sk" style="width:140px;height:64px;"></span></div>
+    <div class="hero-desc" id="heroDesc">Đang lấy dữ liệu thời tiết...</div>
+    <div class="hero-meta">
+      <div class="hero-meta-item">Cao nhất<span id="heroMax">--</span></div>
+      <div class="hero-meta-item">Thấp nhất<span id="heroMin">--</span></div>
+      <div class="hero-meta-item">Độ ẩm<span id="heroHum">--</span></div>
+      <div class="hero-meta-item">Gió<span id="heroWind">--</span></div>
+    </div>
+    <div class="hero-icon" id="heroIcon">⏳</div>
+    <button class="hero-change-city" onclick="changeHomeCity()">✏️ Đổi thành phố</button>
+  </div>
+  <div class="hero-side">
+    <div id="sideCityList"></div>
+    <div class="add-city-btn" onclick="openModal()">+ Thêm thành phố</div>
+  </div>
+</div>
+
+<!-- HOURLY -->
+<div class="section">
+  <div class="section-title">Dự báo theo giờ</div>
+  <div class="hourly-row" id="hourlyRow">
+    <div class="sk" style="width:68px;height:92px;border-radius:12px;flex-shrink:0;"></div>
+    <div class="sk" style="width:68px;height:92px;border-radius:12px;flex-shrink:0;"></div>
+    <div class="sk" style="width:68px;height:92px;border-radius:12px;flex-shrink:0;"></div>
+    <div class="sk" style="width:68px;height:92px;border-radius:12px;flex-shrink:0;"></div>
+    <div class="sk" style="width:68px;height:92px;border-radius:12px;flex-shrink:0;"></div>
+  </div>
+</div>
+
+<!-- 7 DAY -->
+<div class="section" style="padding-bottom:0;">
+  <div class="section-title">Dự báo 7 ngày <span style="font-size:10px;color:rgba(255,255,255,0.3);font-weight:400;"> · 5 ngày thật · 2 ngày ước tính</span></div>
+  <div class="forecast-grid" id="forecastGrid">
+    <div class="sk" style="height:44px;border-radius:10px;margin-bottom:8px;"></div>
+    <div class="sk" style="height:44px;border-radius:10px;margin-bottom:8px;"></div>
+    <div class="sk" style="height:44px;border-radius:10px;"></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">Độ ẩm</div>
+    <div class="stat-value" id="statHum"><span class="sk" style="width:60px;height:28px;"></span></div>
+    <div class="stat-sub" id="statHumSub">--</div>
+    <div class="stat-bar"><div class="stat-bar-fill" id="statHumBar" style="width:0%;background:#42A5F5;"></div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Tốc độ gió</div>
+    <div class="stat-value" id="statWind"><span class="sk" style="width:60px;height:28px;"></span></div>
+    <div class="stat-sub" id="statWindSub">--</div>
+    <div class="stat-bar"><div class="stat-bar-fill" id="statWindBar" style="width:0%;background:#5DCAA5;"></div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Chỉ số UV</div>
+    <div class="stat-value" id="statUv"><span class="sk" style="width:60px;height:28px;"></span></div>
+    <div class="stat-sub" id="statUvSub">--</div>
+    <div class="stat-bar"><div class="stat-bar-fill" id="statUvBar" style="width:0%;background:#EF9F27;"></div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Tầm nhìn</div>
+    <div class="stat-value" id="statVis"><span class="sk" style="width:60px;height:28px;"></span></div>
+    <div class="stat-sub" id="statVisSub">--</div>
+    <div class="stat-bar"><div class="stat-bar-fill" id="statVisBar" style="width:0%;background:#1D9E75;"></div></div>
+  </div>
+</div>
+
+<script>
+  const API_KEY = '5d956ed49e280b8e42d187812de46ee7';
+  let unit = localStorage.getItem('skylaUnit') || 'metric';
+  let unitSym = unit === 'metric' ? '°C' : '°F';
+  let unitSpeed = unit === 'metric' ? 'km/h' : 'mph';
+  let homeCity = localStorage.getItem('skylaHome') || '';
+  let savedCities = JSON.parse(localStorage.getItem('skylaCities') || '[]');
+  let cache = {};
+  let obSelected = '';
+  let lastFcData = null; // Lưu forecast data để render7Day khi đổi unit
+
+  // Sync unit button
+  if(unit === 'imperial') {
+    document.getElementById('btnC').classList.remove('active');
+    document.getElementById('btnF').classList.add('active');
+  }
+
+  // ==================== HELPERS ====================
+  function getIcon(id, pod='d') {
+    const n = pod==='n';
+    if(id>=200&&id<300) return '⛈️';
+    if(id>=300&&id<400) return '🌦️';
+    if(id>=500&&id<510) return '🌧️';
+    if(id===511) return '🌨️';
+    if(id>=520&&id<600) return '🌧️';
+    if(id>=600&&id<700) return '❄️';
+    if(id>=700&&id<800) return '🌫️';
+    if(id===800) return n?'🌙':'☀️';
+    if(id===801) return '🌤️';
+    if(id===802) return '⛅';
+    if(id>=803) return '☁️';
+    return '🌡️';
+  }
+
+  function getWindDir(deg) {
+    return ['Bắc','Đông Bắc','Đông','Đông Nam','Nam','Tây Nam','Tây','Tây Bắc'][Math.round((deg||0)/45)%8];
+  }
+
+  // Convert °C sang °F nếu cần
+  function convertTemp(c) {
+    return unit === 'metric' ? c : Math.round(c * 9/5 + 32);
+  }
+
+  // Format nhiệt độ + ký hiệu — nhận vào °C luôn, tự convert
+  function TfromC(c) { return convertTemp(c) + unitSym; }
+
+  // Format nhiệt độ từ API (đã đúng unit)
+  function T(t) { return Math.round(t) + unitSym; }
+
+  function getSpd(ms) {
+    // OpenWeatherMap trả m/s, convert sang km/h hoặc mph
+    return unit === 'metric' ? Math.round(ms * 3.6) : Math.round(ms * 2.237);
+  }
+
+  async function apiFetch(url) {
+    if(cache[url]) return cache[url];
+    const r = await fetch(url);
+    if(!r.ok) throw new Error('API ' + r.status);
+    const d = await r.json();
+    cache[url] = d;
+    setTimeout(()=>delete cache[url], 600000);
+    return d;
+  }
+
+  // ==================== ONBOARDING ====================
+  const viCities = [
+    {name:'Hồ Chí Minh', q:'Ho Chi Minh City,VN', region:'Miền Nam'},
+    {name:'Hà Nội', q:'Hanoi,VN', region:'Miền Bắc'},
+    {name:'Đà Nẵng', q:'Da Nang,VN', region:'Miền Trung'},
+    {name:'Cần Thơ', q:'Can Tho,VN', region:'Miền Nam'},
+    {name:'Hải Phòng', q:'Hai Phong,VN', region:'Miền Bắc'},
+    {name:'Huế', q:'Hue,VN', region:'Miền Trung'},
+    {name:'Nha Trang', q:'Nha Trang,VN', region:'Miền Trung'},
+    {name:'Đà Lạt', q:'Da Lat,VN', region:'Tây Nguyên'},
+    {name:'Vũng Tàu', q:'Vung Tau,VN', region:'Miền Nam'},
+    {name:'Quy Nhơn', q:'Quy Nhon,VN', region:'Miền Trung'},
+    {name:'Buôn Ma Thuột', q:'Buon Ma Thuot,VN', region:'Tây Nguyên'},
+    {name:'Vinh', q:'Vinh,VN', region:'Miền Trung'},
+    {name:'Thanh Hóa', q:'Thanh Hoa,VN', region:'Miền Trung'},
+    {name:'Biên Hòa', q:'Bien Hoa,VN', region:'Miền Nam'},
+    {name:'Phan Thiết', q:'Phan Thiet,VN', region:'Miền Nam'},
+    {name:'Long Xuyên', q:'Long Xuyen,VN', region:'Miền Nam'},
+    {name:'Rạch Giá', q:'Rach Gia,VN', region:'Miền Nam'},
+  ];
+
+  let obTimer = null;
+  function onObInput(val) {
+    clearTimeout(obTimer);
+    obSelected = '';
+    const dd = document.getElementById('obDropdown');
+    if(!val.trim()) { dd.classList.remove('show'); return; }
+    obTimer = setTimeout(() => {
+      const f = viCities.filter(c=>c.name.toLowerCase().includes(val.toLowerCase())).slice(0,7);
+      if(!f.length) { dd.classList.remove('show'); return; }
+      dd.innerHTML = f.map(c=>`
+        <div class="ob-item" onclick="selectObCity('${c.q}','${c.name}')">
+          <span class="ob-item-icon">📍</span>
+          <div><div class="ob-item-name">${c.name}</div><div class="ob-item-region">${c.region}</div></div>
+        </div>`).join('');
+      dd.classList.add('show');
+    }, 250);
+  }
+
+  function selectObCity(q, name) {
+    obSelected = q;
+    document.getElementById('obInput').value = name;
+    document.getElementById('obDropdown').classList.remove('show');
+    document.getElementById('obError').style.display = 'none';
+  }
+
+  function onObKey(e) { if(e.key==='Enter') confirmCity(); }
+
+  async function confirmCity() {
+    const raw = obSelected || document.getElementById('obInput').value.trim();
+    if(!raw) return;
+    const btn = document.getElementById('obConfirmBtn');
+    btn.disabled = true; btn.textContent = 'Đang kiểm tra...';
+    document.getElementById('obError').style.display = 'none';
+    try {
+      // Fetch bằng metric để lưu tên thành phố thật
+      const w = await apiFetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(raw)}&appid=${API_KEY}&units=metric&lang=vi`);
+      homeCity = w.name;
+      localStorage.setItem('skylaHome', homeCity);
+      if(savedCities.length === 0) {
+        const defaults = ['Ho Chi Minh City','Hanoi','Da Nang'].filter(c=>c!==w.name).slice(0,2);
+        savedCities = defaults;
+        localStorage.setItem('skylaCities', JSON.stringify(savedCities));
+      }
+      document.getElementById('onboarding').classList.add('hidden');
+      renderHero(homeCity);
+      renderSideCities();
+    } catch(e) {
+      document.getElementById('obError').style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Xác nhận →';
+    }
+  }
+
+  // ==================== GPS THẬT ====================
+  function useGPS() {
+    if(!navigator.geolocation) { alert('Trình duyệt không hỗ trợ GPS!'); return; }
+    const btn = document.getElementById('obGpsBtn');
+    btn.innerHTML = '⏳ Đang định vị...';
+    btn.disabled = true;
+
+    navigator.geolocation.getCurrentPosition(
+      async pos => {
+        try {
+          const { latitude: lat, longitude: lon } = pos.coords;
+          // Gọi API bằng tọa độ thật
+          const w = await apiFetch(
+            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=vi`
+          );
+          homeCity = w.name;
+          localStorage.setItem('skylaHome', homeCity);
+          document.getElementById('obInput').value = w.name;
+          obSelected = w.name;
+          if(savedCities.length === 0) {
+            const defaults = ['Ho Chi Minh City','Hanoi'].filter(c=>c!==w.name);
+            savedCities = defaults;
+            localStorage.setItem('skylaCities', JSON.stringify(savedCities));
+          }
+          document.getElementById('onboarding').classList.add('hidden');
+          renderHero(homeCity);
+          renderSideCities();
+        } catch(e) {
+          btn.innerHTML = '📍 Tự động phát hiện vị trí của tôi';
+          btn.disabled = false;
+          alert('Không lấy được thời tiết theo vị trí. Hãy nhập thủ công!');
+        }
+      },
+      err => {
+        btn.innerHTML = '📍 Tự động phát hiện vị trí của tôi';
+        btn.disabled = false;
+        const msg = err.code === 1 ? 'Bạn đã từ chối quyền truy cập vị trí.' : 'Không thể lấy vị trí GPS.';
+        alert(msg + ' Hãy nhập thủ công!');
+      },
+      { timeout: 10000, maximumAge: 60000 }
+    );
+  }
+
+  function changeHomeCity() {
+    localStorage.removeItem('skylaHome');
+    homeCity = '';
+    document.getElementById('obInput').value = '';
+    obSelected = '';
+    const btn = document.getElementById('obConfirmBtn');
+    btn.disabled = false; btn.textContent = 'Xác nhận →';
+    document.getElementById('obError').style.display = 'none';
+    document.getElementById('obGpsBtn').innerHTML = '📍 Tự động phát hiện vị trí của tôi';
+    document.getElementById('obGpsBtn').disabled = false;
+    document.getElementById('onboarding').classList.remove('hidden');
+  }
+
+  // ==================== RENDER HERO ====================
+  async function renderHero(city) {
+    try {
+      const [w, fc] = await Promise.all([
+        apiFetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric&lang=vi`),
+        apiFetch(`https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric&lang=vi&cnt=40`)
+      ]);
+
+      lastFcData = fc; // Lưu lại để dùng khi đổi unit
+
+      const temp = convertTemp(w.main.temp);
+      const feelsLike = convertTemp(w.main.feels_like);
+      const tempMax = convertTemp(w.main.temp_max);
+      const tempMin = convertTemp(w.main.temp_min);
+      const spd = getSpd(w.wind.speed);
+
+      document.getElementById('heroCity').textContent = `Nơi bạn sống · ${w.name}`;
+      document.getElementById('heroTemp').innerHTML = `${temp}<sup>${unitSym}</sup>`;
+      document.getElementById('heroDesc').textContent = `${w.weather[0].description} · Cảm giác như ${feelsLike}${unitSym}`;
+      document.getElementById('heroMax').textContent = tempMax + unitSym;
+      document.getElementById('heroMin').textContent = tempMin + unitSym;
+      document.getElementById('heroHum').textContent = w.main.humidity + '%';
+      document.getElementById('heroWind').textContent = `${spd} ${unitSpeed}`;
+      document.getElementById('heroIcon').textContent = getIcon(w.weather[0].id, w.weather[0].icon?.includes('n')?'n':'d');
+
+      // Background động theo thời tiết
+      const id = w.weather[0].id;
+      let bg = 'linear-gradient(145deg,#1565C0,#1976D2 60%,#1e88e5)';
+      if(id>=200&&id<300) bg='linear-gradient(145deg,#1a1a2e,#37474F 60%,#455A64)';
+      else if(id>=300&&id<600) bg='linear-gradient(145deg,#1a3a5c,#1565C0 60%,#1976D2)';
+      else if(id>=600&&id<700) bg='linear-gradient(145deg,#263238,#546E7A 60%,#78909C)';
+      else if(id===800) bg='linear-gradient(145deg,#1565C0,#1976D2 60%,#42A5F5)';
+      else if(id>=801&&id<803) bg='linear-gradient(145deg,#1a3a5c,#1976D2 60%,#42A5F5)';
+      document.getElementById('heroMain').style.background = bg;
+
+      // Stats
+      const hum = w.main.humidity;
+      document.getElementById('statHum').innerHTML = `${hum}<span class="stat-unit">%</span>`;
+      document.getElementById('statHumSub').textContent = hum>80?'Rất ẩm':hum>60?'Ẩm vừa':'Khô thoáng';
+      document.getElementById('statHumBar').style.width = hum+'%';
+
+      document.getElementById('statWind').innerHTML = `${spd}<span class="stat-unit">${unitSpeed}</span>`;
+      document.getElementById('statWindSub').textContent = 'Hướng ' + getWindDir(w.wind.deg);
+      document.getElementById('statWindBar').style.width = Math.min(spd/120*100,100)+'%';
+
+      const uvEst = Math.max(1, Math.round((1-w.clouds.all/100)*10));
+      document.getElementById('statUv').innerHTML = `${uvEst}<span class="stat-unit">/10</span>`;
+      document.getElementById('statUvSub').textContent = uvEst<=2?'Thấp · An toàn':uvEst<=5?'Trung bình':uvEst<=7?'Cao':'Rất cao · Che chắn';
+      document.getElementById('statUvBar').style.width = uvEst*10+'%';
+
+      const vis = Math.round((w.visibility||10000)/1000);
+      document.getElementById('statVis').innerHTML = `${vis}<span class="stat-unit">km</span>`;
+      document.getElementById('statVisSub').textContent = vis>=8?'Tốt · Bầu trời quang':vis>=4?'Trung bình':'Kém · Có sương mù';
+      document.getElementById('statVisBar').style.width = Math.min(vis/10*100,100)+'%';
+
+      renderHourly(fc.list.slice(0,9));
+      render7Day(fc.list);
+
+      const now = new Date();
+      document.getElementById('updateTime').textContent = `Cập nhật: ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+    } catch(e) {
+      document.getElementById('heroDesc').textContent = '⚠️ Không tải được dữ liệu. Kiểm tra kết nối mạng.';
+    }
+  }
+
+  // ==================== HOURLY ====================
+  function renderHourly(list) {
+    const first = list[0];
+    let html = `<div class="hour-card now">
+      <div class="hour-time">Bây giờ</div>
+      <div class="hour-icon">${getIcon(first.weather[0].id, first.sys?.pod||'d')}</div>
+      <div class="hour-temp">${convertTemp(first.main.temp)}${unitSym}</div>
+    </div>`;
+    list.slice(1).forEach(item => {
+      const d = new Date(item.dt*1000);
+      html += `<div class="hour-card">
+        <div class="hour-time">${d.getHours().toString().padStart(2,'0')}:00</div>
+        <div class="hour-icon">${getIcon(item.weather[0].id, item.sys?.pod||'d')}</div>
+        <div class="hour-temp">${convertTemp(item.main.temp)}${unitSym}</div>
+      </div>`;
+    });
+    document.getElementById('hourlyRow').innerHTML = html;
+  }
+
+  // ==================== 7-DAY ====================
+  function render7Day(list) {
+    const DAYS = ['CN','T2','T3','T4','T5','T6','T7'];
+    const dayMap = {};
+    list.forEach(item => {
+      const key = new Date(item.dt*1000).toDateString();
+      if(!dayMap[key]) dayMap[key]={temps:[],items:[]};
+      dayMap[key].temps.push(item.main.temp); // luôn lưu °C
+      dayMap[key].items.push(item);
+    });
+
+    const realEntries = Object.entries(dayMap).slice(0,5);
+    const allMaxC = realEntries.map(([,v])=>Math.max(...v.temps));
+    const allMinC = realEntries.map(([,v])=>Math.min(...v.temps));
+    const gMaxC = Math.max(...allMaxC);
+    const gMinC = Math.min(...allMinC);
+    const avgMaxC = allMaxC.reduce((a,b)=>a+b,0)/allMaxC.length;
+    const avgMinC = allMinC.reduce((a,b)=>a+b,0)/allMinC.length;
+
+    let html = '';
+
+    // 5 ngày thật từ API
+    realEntries.forEach(([key,val],i) => {
+      const d = new Date(key);
+      const label = i===0?'Hôm nay':DAYS[d.getDay()];
+      const maxC = Math.max(...val.temps);
+      const minC = Math.min(...val.temps);
+      const mid = val.items[Math.floor(val.items.length/2)];
+      const barW = gMaxC>gMinC?Math.round((maxC-gMinC)/(gMaxC-gMinC)*100):50;
+      html += `<div class="forecast-row">
+        <div class="forecast-day">${label}</div>
+        <div class="forecast-icon">${getIcon(mid.weather[0].id,'d')}</div>
+        <div class="forecast-desc">${mid.weather[0].description}</div>
+        <div class="forecast-bar-wrap"><div class="forecast-bar" style="width:${barW}%"></div></div>
+        <div class="forecast-temps"><span class="f-high">${convertTemp(maxC)}${unitSym}</span><span class="f-low">${convertTemp(minC)}${unitSym}</span></div>
+      </div>`;
+    });
+
+    // 2 ngày ước tính (ngày 6 & 7) — giao diện cứng
+    const staticDays = [
+      { icons:'⛅', desc:'Có mây rải rác', dMax:+1, dMin:0 },
+      { icons:'🌤️', desc:'Ít mây',         dMax:-1, dMin:-1 },
+    ];
+
+    staticDays.forEach((s, i) => {
+      const lastDate = new Date(realEntries[realEntries.length-1][0]);
+      lastDate.setDate(lastDate.getDate() + i + 1);
+      const label = DAYS[lastDate.getDay()];
+      const estMaxC = avgMaxC + s.dMax;
+      const estMinC = avgMinC + s.dMin;
+      const barW = 50 + i * 8;
+      html += `<div class="forecast-row estimated" title="Ngày 6-7: ước tính (cần API trả phí để có dữ liệu thật)">
+        <div class="forecast-day">${label}</div>
+        <div class="forecast-icon">${s.icons}</div>
+        <div class="forecast-desc">${s.desc}<span class="est-badge">~ước tính</span></div>
+        <div class="forecast-bar-wrap"><div class="forecast-bar" style="width:${barW}%"></div></div>
+        <div class="forecast-temps"><span class="f-high">${convertTemp(estMaxC)}${unitSym}</span><span class="f-low">${convertTemp(estMinC)}${unitSym}</span></div>
+      </div>`;
+    });
+
+    document.getElementById('forecastGrid').innerHTML = html;
+  }
+
+  // ==================== SIDE CITIES ====================
+  async function renderSideCities() {
+    const container = document.getElementById('sideCityList');
+    container.innerHTML = '';
+    for(const city of savedCities) {
+      try {
+        const w = await apiFetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric&lang=vi`);
+        const div = document.createElement('div');
+        div.className = 'side-card';
+        div.onclick = () => renderHero(w.name);
+        div.innerHTML = `
+          <div class="side-card-top"><div class="side-city-name">${w.name}</div><div class="side-icon">${getIcon(w.weather[0].id,'d')}</div></div>
+          <div class="side-temp">${convertTemp(w.main.temp)}${unitSym}</div>
+          <div class="side-desc">${w.weather[0].description} · ${w.main.humidity}% ẩm</div>`;
+        container.appendChild(div);
+      } catch(e) {}
+    }
+  }
+
+  // ==================== NAV SEARCH ====================
+  let navTimer = null;
+  function onNavSearch(val) {
+    clearTimeout(navTimer);
+    const dd = document.getElementById('navDropdown');
+    if(!val.trim()) { dd.classList.remove('show'); return; }
+    navTimer = setTimeout(()=>{
+      const f = viCities.filter(c=>c.name.toLowerCase().includes(val.toLowerCase())).slice(0,6);
+      if(!f.length) { dd.classList.remove('show'); return; }
+      dd.innerHTML = f.map(c=>`<div class="nav-dd-item" onclick="pickNavCity('${c.q}','${c.name}')">${c.name} <span style="font-size:10px;color:rgba(255,255,255,0.4);">${c.region}</span></div>`).join('');
+      dd.classList.add('show');
+    },300);
+  }
+  function pickNavCity(q,name) {
+    document.getElementById('navSearch').value = name;
+    document.getElementById('navDropdown').classList.remove('show');
+    renderHero(q);
+  }
+  function onNavKey(e) {
+    if(e.key==='Enter') {
+      const v = document.getElementById('navSearch').value.trim();
+      if(v) { document.getElementById('navDropdown').classList.remove('show'); renderHero(v); }
+    }
+  }
+  document.addEventListener('click', e => {
+    if(!e.target.closest('.nav-search-wrap')) document.getElementById('navDropdown').classList.remove('show');
+    if(!e.target.closest('.ob-search-wrap')) document.getElementById('obDropdown').classList.remove('show');
+  });
+
+  // ==================== MODAL ====================
+  function openModal() { document.getElementById('modalOverlay').classList.add('show'); setTimeout(()=>document.getElementById('modalInput').focus(),100); }
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); document.getElementById('modalInput').value=''; document.getElementById('modalError').style.display='none'; }
+  async function addCity() {
+    const raw = document.getElementById('modalInput').value.trim();
+    if(!raw) return;
+    try {
+      const w = await apiFetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(raw)}&appid=${API_KEY}&units=metric&lang=vi`);
+      if(!savedCities.includes(w.name)) { savedCities.push(w.name); localStorage.setItem('skylaCities', JSON.stringify(savedCities)); }
+      closeModal();
+      renderSideCities();
+    } catch(e) { document.getElementById('modalError').style.display='block'; }
+  }
+
+  // ==================== UNIT TOGGLE °C / °F ====================
+  function setUnit(u, btn) {
+    unit = u;
+    unitSym = u === 'metric' ? '°C' : '°F';
+    unitSpeed = u === 'metric' ? 'km/h' : 'mph';
+    localStorage.setItem('skylaUnit', u);
+    cache = {}; // clear cache để fetch lại đúng unit
+    document.querySelectorAll('.unit-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    // Reload toàn bộ dữ liệu với unit mới
+    if(homeCity) {
+      renderHero(homeCity);
+      renderSideCities();
+    }
+  }
+
+  // ==================== INIT ====================
+  if(homeCity) {
+    document.getElementById('onboarding').classList.add('hidden');
+    renderHero(homeCity);
+    renderSideCities();
+  }
+  // Nếu chưa có homeCity, onboarding tự hiện
+</script>
+</body>
+</html>
