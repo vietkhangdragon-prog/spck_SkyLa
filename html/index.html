@@ -5,85 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SkyLa — Trang chủ</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/index.css">
-
-  <!-- ==================== CSS RESPONSIVE CHO NAVBAR (FIX MOBILE) ==================== -->
-  <style>
-    /* Nút ba gạch mặc định sẽ ẩn trên máy tính */
-    .nav-toggle {
-      display: none;
-      font-size: 26px;
-      cursor: pointer;
-      color: #ffffff;
-      user-select: none;
-      transition: transform 0.2s ease;
-    }
-
-    /* Cấu hình giao diện khi màn hình nhỏ hơn 768px (Điện thoại & Máy tính bảng) */
-    @media (max-width: 768px) {
-      .navbar {
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 15px;
-        flex-wrap: wrap; /* Hỗ trợ rớt hàng mượt mà nếu màn hình quá bé */
-      }
-
-      /* Hiện nút ba gạch trên mobile */
-      .nav-toggle {
-        display: block;
-        order: 2;
-      }
-
-      .nav-right {
-        order: 3;
-        gap: 8px; /* Thu nhỏ khoảng cách các icon góc phải */
-      }
-
-      /* Biến đổi thanh điều hướng thành dạng menu thả xuống ẩn */
-      .nav-links {
-        display: none !important; /* Ép ẩn thanh menu ngang của PC */
-        flex-direction: column;
-        width: 100%;
-        position: absolute;
-        top: 100%; /* Nằm ngay sát phía dưới thanh navbar chính */
-        left: 0;
-        background: #1976D2; /* Màu xanh chủ đạo đồng bộ với app SkyLa của bạn */
-        padding: 10px 0;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        z-index: 9999;
-        order: 4;
-      }
-
-      /* Khi được kích hoạt qua class .open bằng JS, menu sẽ hiện ra */
-      .nav-links.open {
-        display: flex !important;
-      }
-
-      .nav-link {
-        padding: 12px 25px;
-        width: 100%;
-        display: block;
-        box-sizing: border-box;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      
-      .nav-link:last-child {
-        border-bottom: none;
-      }
-
-      /* Tối ưu thêm không gian hiển thị trên màn hình siêu nhỏ (< 480px) */
-      @media (max-width: 480px) {
-        .update-time {
-          display: none; /* Ẩn bớt dòng "Cập nhật lúc..." để thanh trạng thái đỡ chật chội */
-        }
-        .nav-search-input {
-          width: 90px; /* Co nhỏ ô Tìm kiếm thành phố lại để nhường chỗ */
-        }
-      }
-    }
-  </style>
+ <link rel="stylesheet" href="../css/index.css">
 </head>
 <body>
 
@@ -124,12 +46,7 @@
 <!-- NAVBAR -->
 <nav class="navbar">
   <div class="nav-logo">Sky<span>La</span></div>
-  
-  <!-- Nút Menu Hamburger được thêm mới ở đây -->
-  <div class="nav-toggle" id="navToggle" onclick="toggleMobileMenu()">☰</div>
-  
-  <!-- Gắn thêm ID vào đây để JavaScript dễ xử lý -->
-  <div class="nav-links" id="navLinks">
+  <div class="nav-links">
     <a class="nav-link active" href="#">Trang chủ</a>
     <a class="nav-link" href="./map.html">Bản đồ</a>
     <a class="nav-link" href="./news.html">Tin tức</a>
@@ -598,20 +515,11 @@
     document.getElementById('navSearch').value = name;
     document.getElementById('navDropdown').classList.remove('show');
     renderHero(q);
-    
-    // Đóng luôn menu mobile sau khi chọn thành phố (nếu đang mở)
-    document.getElementById('navLinks').classList.remove('open');
-    document.getElementById('navToggle').textContent = '☰';
   }
   function onNavKey(e) {
     if(e.key==='Enter') {
       const v = document.getElementById('navSearch').value.trim();
-      if(v) { 
-        document.getElementById('navDropdown').classList.remove('show'); 
-        renderHero(v); 
-        document.getElementById('navLinks').classList.remove('open');
-        document.getElementById('navToggle').textContent = '☰';
-      }
+      if(v) { document.getElementById('navDropdown').classList.remove('show'); renderHero(v); }
     }
   }
   document.addEventListener('click', e => {
@@ -646,21 +554,6 @@
     if(homeCity) {
       renderHero(homeCity);
       renderSideCities();
-    }
-  }
-
-  // ==================== TOGGLE MENU MOBILE (MỚI THÊM ĐỂ FIX) ====================
-  function toggleMobileMenu() {
-    const navLinks = document.getElementById('navLinks');
-    const navToggle = document.getElementById('navToggle');
-    
-    navLinks.classList.toggle('open');
-    
-    // Tự động chuyển đổi icon giữa ☰ và ✕ để tạo hiệu ứng UI mượt mà
-    if (navLinks.classList.contains('open')) {
-      navToggle.textContent = '✕';
-    } else {
-      navToggle.textContent = '☰';
     }
   }
 
