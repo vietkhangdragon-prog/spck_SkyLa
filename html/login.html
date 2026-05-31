@@ -9,14 +9,16 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../css/login.css" />
+
+    <!-- ✅ BẮT BUỘC: Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
-    <!-- LEFT PANEL -->
+    <!-- LEFT PANEL (giữ nguyên) -->
     <div class="left-panel">
       <div class="cloud cloud1"></div>
       <div class="cloud cloud2"></div>
       <div class="cloud cloud3"></div>
-
       <div class="brand">
         <div class="logo-circle">🌤️</div>
         <div class="brand-name">Sky<span>La</span></div>
@@ -24,7 +26,6 @@
           Thời tiết thông minh cho cuộc sống của bạn
         </div>
       </div>
-
       <div class="weather-cards">
         <div class="weather-card">
           <div class="wc-icon">⛅</div>
@@ -60,6 +61,19 @@
         <div class="form-subtitle">Đăng nhập để xem thời tiết của bạn</div>
       </div>
 
+      <!-- ✅ THÊM: Thông báo lỗi/thành công -->
+      <div
+        id="auth-message"
+        style="
+          display: none;
+          padding: 10px 14px;
+          border-radius: 10px;
+          margin-bottom: 14px;
+          font-size: 13px;
+          font-family: &quot;Outfit&quot;, sans-serif;
+        "
+      ></div>
+
       <div class="field">
         <label for="email">Email</label>
         <input type="email" id="email" placeholder="email@example.com" />
@@ -78,10 +92,15 @@
           <input type="checkbox" id="remember" />
           <label for="remember">Ghi nhớ đăng nhập</label>
         </div>
-        <a href="#" class="forgot-link">Quên mật khẩu?</a>
+        <a href="#" class="forgot-link" onclick="handleForgotPassword(event)"
+          >Quên mật khẩu?</a
+        >
       </div>
 
-      <a href="/index.html" class="btn-login">Đăng nhập</a>
+      <!-- ✅ SỬA: Đổi từ <a href="/index.html"> thành <button onclick="handleLogin()"> -->
+      <button class="btn-login" id="btnLogin" onclick="handleLogin()">
+        Đăng nhập
+      </button>
 
       <div class="divider">
         <div class="divider-line"></div>
@@ -89,7 +108,7 @@
         <div class="divider-line"></div>
       </div>
 
-      <button class="btn-google">
+      <button class="btn-google" onclick="handleGoogleLogin()">
         <div class="google-icon"></div>
         Đăng nhập với Google
       </button>
@@ -98,6 +117,9 @@
         Chưa có tài khoản? <a href="./sign_up.html">Đăng ký miễn phí</a>
       </div>
     </div>
+
+    <!-- ✅ BẮT BUỘC: Supabase config -->
+    <script src="../js/supabase-config.js"></script>
 
     <script>
       function togglePw(id, btn) {
@@ -110,6 +132,97 @@
           btn.textContent = "👁";
         }
       }
+
+      function showMsg(text, isError = false) {
+        const el = document.getElementById("auth-message");
+        el.textContent = text;
+        el.style.display = "block";
+        el.style.background = isError
+          ? "rgba(229,57,53,0.15)"
+          : "rgba(76,175,80,0.15)";
+        el.style.color = isError ? "#EF5350" : "#4CAF50";
+        el.style.border = isError
+          ? "1px solid rgba(229,57,53,0.3)"
+          : "1px solid rgba(76,175,80,0.3)";
+      }
+
+      // ====================================================
+      // ĐĂNG NHẬP
+      // ====================================================
+      async function handleLogin() {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("pw").value;
+        const btn = document.getElementById("btnLogin");
+
+        if (!email || !password) {
+          showMsg("Vui lòng nhập email và mật khẩu!", true);
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "Đang đăng nhập...";
+
+        const { data, error } = await _supabase.auth.signInWithPassword({
+          email: email,
+          password: password,
+        });
+
+        if (error) {
+          if (error.message.includes("Email not confirmed")) {
+            showMsg("Email chưa được xác nhận! Kiểm tra hộp thư.", true);
+          } else if (error.message.includes("Invalid login credentials")) {
+            showMsg("Sai email hoặc mật khẩu!", true);
+          } else {
+            showMsg("Lỗi: " + error.message, true);
+          }
+          btn.disabled = false;
+          btn.textContent = "Đăng nhập";
+          return;
+        }
+
+        // ✅ Thành công → chờ session lưu xong rồi redirect
+        showMsg("Đăng nhập thành công!");
+        setTimeout(() => {
+          window.location.href = "../index.html";
+        }, 500);
+      }
+
+      // ====================================================
+      // GOOGLE LOGIN
+      // ====================================================
+      async function handleGoogleLogin() {
+        const { data, error } = await _supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: { redirectTo: window.location.origin + "/index.html" },
+        });
+        if (error) showMsg("Lỗi: " + error.message, true);
+      }
+
+      // ====================================================
+      // QUÊN MẬT KHẨU
+      // ====================================================
+      async function handleForgotPassword(e) {
+        e.preventDefault();
+        const email = document.getElementById("email").value.trim();
+        if (!email) {
+          showMsg("Nhập email trước rồi bấm Quên mật khẩu!", true);
+          return;
+        }
+        const { error } = await _supabase.auth.resetPasswordForEmail(email);
+        if (error) {
+          showMsg("Lỗi: " + error.message, true);
+        } else {
+          showMsg("Đã gửi email khôi phục! Kiểm tra hộp thư.");
+        }
+      }
+
+      // Enter để đăng nhập
+      document.getElementById("pw").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handleLogin();
+      });
+
+      // Nếu đã đăng nhập → chuyển về trang chủ
+      redirectIfLoggedIn();
     </script>
   </body>
 </html>

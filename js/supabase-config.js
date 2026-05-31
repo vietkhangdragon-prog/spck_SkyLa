@@ -3,17 +3,23 @@
 // CẤU HÌNH SUPABASE DÙNG CHUNG CHO TOÀN BỘ SKYLA
 // ====================================================
 
-const SUPABASE_URL = "https://spkppkoqkwtdzsybioxk.supabase.co"; // ← Thay bằng URL của bạn
-const SUPABASE_ANON_KEY = "sb_publishable_HK9fWv5nUCZJAlUjK0mPoA_buWoBEOR"; // ← Thay bằng Anon Key của bạn
+const SUPABASE_URL = "https://spkppkoqkwtdzsybioxk.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwa3Bwa29xa3d0ZHpzeWJpb3hrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NTU1MjcsImV4cCI6MjA5NTEzMTUyN30.NaCh309Vfv7DHuG_AT6Q0GQ_7fj07wJXXsJRTEFmqEY";
 
 const { createClient } = supabase;
-const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    persistSession: true,
+    storageKey: "skyla-auth",
+    storage: window.localStorage,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+  },
+});
 
-// ====================================================
-// HÀM TIỆN ÍCH AUTH DÙNG CHUNG
-// ====================================================
+// --- Hàm tiện ích ---
 
-// Lấy session hiện tại
 async function getSession() {
   const {
     data: { session },
@@ -21,7 +27,6 @@ async function getSession() {
   return session;
 }
 
-// Lấy user hiện tại
 async function getUser() {
   const {
     data: { user },
@@ -29,20 +34,14 @@ async function getUser() {
   return user;
 }
 
-// Đăng xuất
 async function logOut() {
   await _supabase.auth.signOut();
-  // Xóa dữ liệu local của SkyLa nếu muốn
   localStorage.removeItem("skylaHome");
   localStorage.removeItem("skylaCities");
-  // Chuyển về trang login
   window.location.href = getLoginPath();
 }
 
-// Tự detect đường dẫn login tuỳ vào trang đang ở đâu
 function getLoginPath() {
-  // Nếu đang ở root (index.html) → html/login.html
-  // Nếu đang ở html/ → login.html
   if (window.location.pathname.includes("/html/")) {
     return "login.html";
   }
@@ -56,7 +55,6 @@ function getIndexPath() {
   return "index.html";
 }
 
-// Kiểm tra đăng nhập — dùng ở các trang cần bảo vệ (index, map, news, history...)
 async function requireAuth() {
   const session = await getSession();
   if (!session) {
@@ -66,7 +64,6 @@ async function requireAuth() {
   return session;
 }
 
-// Kiểm tra đã đăng nhập chưa — dùng ở trang login/signup (nếu đã login thì redirect)
 async function redirectIfLoggedIn() {
   const session = await getSession();
   if (session) {
