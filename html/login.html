@@ -1,114 +1,228 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SkyLa — Đăng nhập</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/login.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkyLa — Đăng nhập</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/login.css" />
 
-  <!-- LEFT PANEL -->
-  <div class="left-panel">
-    <div class="cloud cloud1"></div>
-    <div class="cloud cloud2"></div>
-    <div class="cloud cloud3"></div>
-
-    <div class="brand">
-      <div class="logo-circle">🌤️</div>
-      <div class="brand-name">Sky<span>La</span></div>
-      <div class="brand-tagline">Thời tiết thông minh cho cuộc sống của bạn</div>
-    </div>
-
-    <div class="weather-cards">
-      <div class="weather-card">
-        <div class="wc-icon">⛅</div>
-        <div class="wc-info">
-          <div class="wc-city">Hồ Chí Minh</div>
-          <div class="wc-desc">Có mây rải rác</div>
+    <!-- ✅ BẮT BUỘC: Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <!-- LEFT PANEL (giữ nguyên) -->
+    <div class="left-panel">
+      <div class="cloud cloud1"></div>
+      <div class="cloud cloud2"></div>
+      <div class="cloud cloud3"></div>
+      <div class="brand">
+        <div class="logo-circle">🌤️</div>
+        <div class="brand-name">Sky<span>La</span></div>
+        <div class="brand-tagline">
+          Thời tiết thông minh cho cuộc sống của bạn
         </div>
-        <div class="wc-temp">34°</div>
       </div>
-      <div class="weather-card">
-        <div class="wc-icon">🌧️</div>
-        <div class="wc-info">
-          <div class="wc-city">Hà Nội</div>
-          <div class="wc-desc">Mưa nhẹ</div>
+      <div class="weather-cards">
+        <div class="weather-card">
+          <div class="wc-icon">⛅</div>
+          <div class="wc-info">
+            <div class="wc-city">Hồ Chí Minh</div>
+            <div class="wc-desc">Có mây rải rác</div>
+          </div>
+          <div class="wc-temp">34°</div>
         </div>
-        <div class="wc-temp">27°</div>
-      </div>
-      <div class="weather-card">
-        <div class="wc-icon">☀️</div>
-        <div class="wc-info">
-          <div class="wc-city">Đà Nẵng</div>
-          <div class="wc-desc">Nắng đẹp</div>
+        <div class="weather-card">
+          <div class="wc-icon">🌧️</div>
+          <div class="wc-info">
+            <div class="wc-city">Hà Nội</div>
+            <div class="wc-desc">Mưa nhẹ</div>
+          </div>
+          <div class="wc-temp">27°</div>
         </div>
-        <div class="wc-temp">31°</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- RIGHT PANEL -->
-  <div class="right-panel">
-    <div class="form-header">
-      <div class="form-title">Chào mừng trở lại!</div>
-      <div class="form-subtitle">Đăng nhập để xem thời tiết của bạn</div>
-    </div>
-
-    <div class="field">
-      <label for="email">Email</label>
-      <input type="email" id="email" placeholder="email@example.com" />
-    </div>
-
-    <div class="field">
-      <label for="pw">Mật khẩu</label>
-      <div class="password-wrap">
-        <input type="password" id="pw" placeholder="Nhập mật khẩu" />
-        <button class="eye-btn" onclick="togglePw('pw', this)">👁</button>
+        <div class="weather-card">
+          <div class="wc-icon">☀️</div>
+          <div class="wc-info">
+            <div class="wc-city">Đà Nẵng</div>
+            <div class="wc-desc">Nắng đẹp</div>
+          </div>
+          <div class="wc-temp">31°</div>
+        </div>
       </div>
     </div>
 
-    <div class="row-options">
-      <div class="remember-row">
-        <input type="checkbox" id="remember" />
-        <label for="remember">Ghi nhớ đăng nhập</label>
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <div class="form-header">
+        <div class="form-title">Chào mừng trở lại!</div>
+        <div class="form-subtitle">Đăng nhập để xem thời tiết của bạn</div>
       </div>
-      <a href="#" class="forgot-link">Quên mật khẩu?</a>
+
+      <!-- ✅ THÊM: Thông báo lỗi/thành công -->
+      <div
+        id="auth-message"
+        style="
+          display: none;
+          padding: 10px 14px;
+          border-radius: 10px;
+          margin-bottom: 14px;
+          font-size: 13px;
+          font-family: &quot;Outfit&quot;, sans-serif;
+        "
+      ></div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="email@example.com" />
+      </div>
+
+      <div class="field">
+        <label for="pw">Mật khẩu</label>
+        <div class="password-wrap">
+          <input type="password" id="pw" placeholder="Nhập mật khẩu" />
+          <button class="eye-btn" onclick="togglePw('pw', this)">👁</button>
+        </div>
+      </div>
+
+      <div class="row-options">
+        <div class="remember-row">
+          <input type="checkbox" id="remember" />
+          <label for="remember">Ghi nhớ đăng nhập</label>
+        </div>
+        <a href="#" class="forgot-link" onclick="handleForgotPassword(event)"
+          >Quên mật khẩu?</a
+        >
+      </div>
+
+      <!-- ✅ SỬA: Đổi từ <a href="/index.html"> thành <button onclick="handleLogin()"> -->
+      <button class="btn-login" id="btnLogin" onclick="handleLogin()">
+        Đăng nhập
+      </button>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">hoặc</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <button class="btn-google" onclick="handleGoogleLogin()">
+        <div class="google-icon"></div>
+        Đăng nhập với Google
+      </button>
+
+      <div class="register-link">
+        Chưa có tài khoản? <a href="./sign_up.html">Đăng ký miễn phí</a>
+      </div>
     </div>
 
-    <a href="./main.html" class="btn-login">Đăng nhập</a>
+    <!-- ✅ BẮT BUỘC: Supabase config -->
+    <script src="../js/supabase-config.js"></script>
 
-   
-
-    <div class="divider">
-      <div class="divider-line"></div>
-      <div class="divider-text">hoặc</div>
-      <div class="divider-line"></div>
-    </div>
-
-    <button class="btn-google">
-      <div class="google-icon"></div>
-      Đăng nhập với Google
-    </button>
-
-    <div class="register-link">
-      Chưa có tài khoản? <a href="./sign_up.html">Đăng ký miễn phí</a>
-    </div>
-  </div>
-
-  <script>
-    function togglePw(id, btn) {
-      const inp = document.getElementById(id);
-      if (inp.type === 'password') {
-        inp.type = 'text';
-        btn.textContent = '🙈';
-      } else {
-        inp.type = 'password';
-        btn.textContent = '👁';
+    <script>
+      function togglePw(id, btn) {
+        const inp = document.getElementById(id);
+        if (inp.type === "password") {
+          inp.type = "text";
+          btn.textContent = "🙈";
+        } else {
+          inp.type = "password";
+          btn.textContent = "👁";
+        }
       }
-    }
-  </script>
 
-</body>
+      function showMsg(text, isError = false) {
+        const el = document.getElementById("auth-message");
+        el.textContent = text;
+        el.style.display = "block";
+        el.style.background = isError
+          ? "rgba(229,57,53,0.15)"
+          : "rgba(76,175,80,0.15)";
+        el.style.color = isError ? "#EF5350" : "#4CAF50";
+        el.style.border = isError
+          ? "1px solid rgba(229,57,53,0.3)"
+          : "1px solid rgba(76,175,80,0.3)";
+      }
+
+      // ====================================================
+      // ĐĂNG NHẬP
+      // ====================================================
+      async function handleLogin() {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("pw").value;
+        const btn = document.getElementById("btnLogin");
+
+        if (!email || !password) {
+          showMsg("Vui lòng nhập email và mật khẩu!", true);
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "Đang đăng nhập...";
+
+        const { data, error } = await _supabase.auth.signInWithPassword({
+          email: email,
+          password: password,
+        });
+
+        if (error) {
+          if (error.message.includes("Email not confirmed")) {
+            showMsg("Email chưa được xác nhận! Kiểm tra hộp thư.", true);
+          } else if (error.message.includes("Invalid login credentials")) {
+            showMsg("Sai email hoặc mật khẩu!", true);
+          } else {
+            showMsg("Lỗi: " + error.message, true);
+          }
+          btn.disabled = false;
+          btn.textContent = "Đăng nhập";
+          return;
+        }
+
+        // ✅ Thành công → chờ session lưu xong rồi redirect
+        showMsg("Đăng nhập thành công!");
+        setTimeout(() => {
+          window.location.href = "../index.html";
+        }, 500);
+      }
+
+      // ====================================================
+      // GOOGLE LOGIN
+      // ====================================================
+      async function handleGoogleLogin() {
+        const { data, error } = await _supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: { redirectTo: window.location.origin + "/index.html" },
+        });
+        if (error) showMsg("Lỗi: " + error.message, true);
+      }
+
+      // ====================================================
+      // QUÊN MẬT KHẨU
+      // ====================================================
+      async function handleForgotPassword(e) {
+        e.preventDefault();
+        const email = document.getElementById("email").value.trim();
+        if (!email) {
+          showMsg("Nhập email trước rồi bấm Quên mật khẩu!", true);
+          return;
+        }
+        const { error } = await _supabase.auth.resetPasswordForEmail(email);
+        if (error) {
+          showMsg("Lỗi: " + error.message, true);
+        } else {
+          showMsg("Đã gửi email khôi phục! Kiểm tra hộp thư.");
+        }
+      }
+
+      // Enter để đăng nhập
+      document.getElementById("pw").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handleLogin();
+      });
+
+      // Nếu đã đăng nhập → chuyển về trang chủ
+      redirectIfLoggedIn();
+    </script>
+  </body>
 </html>
