@@ -1,435 +1,236 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SkyLa — Lịch sử</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-  <link rel="stylesheet" href="../css/history.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkyLa — Đăng nhập</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/login.css" />
 
-<nav class="navbar">
-  <div class="nav-logo">Sky<span>La</span></div>
-  <div class="nav-links">
-    <a class="nav-link" href="../index.html">Trang chủ</a>
-    <a class="nav-link" href="./map.html">Bản đồ</a>
-    <a class="nav-link" href="./news.html">Tin tức</a>
-    <a class="nav-link active" href="#">Lịch sử</a>
-  </div>
-  <div class="nav-right"></div>
-</nav>
-
-<div class="page">
-  <div class="page-header">
-    <div class="page-title">Lịch sử <span>Thời tiết</span></div>
-    <div class="header-controls">
-      <select class="select-box" id="citySelect" onchange="loadHistory()">
-        <option value="Ho Chi Minh City">Hồ Chí Minh</option>
-        <option value="Hanoi">Hà Nội</option>
-        <option value="Da Nang">Đà Nẵng</option>
-        <option value="Can Tho">Cần Thơ</option>
-        <option value="Hue">Huế</option>
-        <option value="Nha Trang">Nha Trang</option>
-        <option value="Da Lat">Đà Lạt</option>
-        <option value="Bien Hoa">Biên Hòa</option>
-      </select>
-      <button class="export-btn" onclick="exportChart()">📷 Xuất ảnh</button>
-    </div>
-  </div>
-
-  <!-- MONTH FILTER -->
-  <div class="month-filter" id="monthFilter">
-    <div class="month-btn active" onclick="setMonth(this, -1)">Cả năm</div>
-    <div class="month-btn" onclick="setMonth(this, 0)">T1</div>
-    <div class="month-btn" onclick="setMonth(this, 1)">T2</div>
-    <div class="month-btn" onclick="setMonth(this, 2)">T3</div>
-    <div class="month-btn" onclick="setMonth(this, 3)">T4</div>
-    <div class="month-btn" onclick="setMonth(this, 4)">T5</div>
-    <div class="month-btn" onclick="setMonth(this, 5)">T6</div>
-    <div class="month-btn" onclick="setMonth(this, 6)">T7</div>
-    <div class="month-btn" onclick="setMonth(this, 7)">T8</div>
-    <div class="month-btn" onclick="setMonth(this, 8)">T9</div>
-    <div class="month-btn" onclick="setMonth(this, 9)">T10</div>
-    <div class="month-btn" onclick="setMonth(this, 10)">T11</div>
-    <div class="month-btn" onclick="setMonth(this, 11)">T12</div>
-  </div>
-
-  <!-- STAT CARDS -->
-  <div class="stat-row" id="statRow">
-    <div class="stat-card"><div class="stat-label">Nhiệt độ TB</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
-    <div class="stat-card"><div class="stat-label">Cao nhất</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
-    <div class="stat-card"><div class="stat-label">Thấp nhất</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
-    <div class="stat-card"><div class="stat-label">Độ ẩm TB</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
-  </div>
-
-  <!-- CHART -->
-  <div class="chart-section">
-    <div class="chart-header">
-      <div class="chart-title" id="chartTitle">Biểu đồ nhiệt độ theo tháng</div>
-      <div class="chart-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#EF9F27;"></div>Cao nhất</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#42A5F5;"></div>Thấp nhất</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#66BB6A;"></div>Trung bình</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.3);"></div>Dự báo 5 ngày</div>
+    <!-- ✅ THÊM: Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <!-- LEFT PANEL (giữ nguyên) -->
+    <div class="left-panel">
+      <div class="cloud cloud1"></div>
+      <div class="cloud cloud2"></div>
+      <div class="cloud cloud3"></div>
+      <div class="brand">
+        <div class="logo-circle">🌤️</div>
+        <div class="brand-name">Sky<span>La</span></div>
+        <div class="brand-tagline">
+          Thời tiết thông minh cho cuộc sống của bạn
+        </div>
+      </div>
+      <div class="weather-cards">
+        <div class="weather-card">
+          <div class="wc-icon">⛅</div>
+          <div class="wc-info">
+            <div class="wc-city">Hồ Chí Minh</div>
+            <div class="wc-desc">Có mây rải rác</div>
+          </div>
+          <div class="wc-temp">34°</div>
+        </div>
+        <div class="weather-card">
+          <div class="wc-icon">🌧️</div>
+          <div class="wc-info">
+            <div class="wc-city">Hà Nội</div>
+            <div class="wc-desc">Mưa nhẹ</div>
+          </div>
+          <div class="wc-temp">27°</div>
+        </div>
+        <div class="weather-card">
+          <div class="wc-icon">☀️</div>
+          <div class="wc-info">
+            <div class="wc-city">Đà Nẵng</div>
+            <div class="wc-desc">Nắng đẹp</div>
+          </div>
+          <div class="wc-temp">31°</div>
+        </div>
       </div>
     </div>
-    <div class="chart-wrap">
-      <canvas id="tempChart"></canvas>
-    </div>
-  </div>
 
-  <!-- BOTTOM -->
-  <div class="bottom-grid">
-    <div class="day-stats">
-      <div class="ds-title">Thống kê thời tiết hiện tại</div>
-      <div id="dayStatsContent"><div class="loading-msg">⏳ Đang tải...</div></div>
-    </div>
-    <div class="year-compare">
-      <div class="yc-title">Dự báo 5 ngày tới</div>
-      <div id="forecastContent"><div class="loading-msg">⏳ Đang tải...</div></div>
-    </div>
-  </div>
-</div>
-
-<script>
-  const API_KEY = '5d956ed49e280b8e42d187812de46ee7';
-  let myChart = null;
-  let selectedMonth = -1; // -1 = cả năm
-  let currentData = null;
-
-  // Set thành phố từ localStorage nếu có
-  const savedHome = localStorage.getItem('skylaHome');
-  if(savedHome) {
-    const sel = document.getElementById('citySelect');
-    for(let opt of sel.options) {
-      if(opt.value.toLowerCase() === savedHome.toLowerCase()) {
-        opt.selected = true; break;
-      }
-    }
-  }
-
-  function setMonth(btn, month) {
-    document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    selectedMonth = month;
-    if(currentData) renderChart(currentData);
-  }
-
-  // ===== FETCH CURRENT WEATHER + FORECAST =====
-  async function loadHistory() {
-    const city = document.getElementById('citySelect').value;
-    showSkeletons();
-
-    try {
-      const [wRes, fcRes] = await Promise.all([
-        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric&lang=vi`),
-        fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric&lang=vi&cnt=40`)
-      ]);
-      const [w, fc] = await Promise.all([wRes.json(), fcRes.json()]);
-
-      currentData = { w, fc };
-
-      renderStats(w, fc);
-      renderChart({ w, fc });
-      renderDayStats(w);
-      renderForecast(fc);
-    } catch(e) {
-      document.getElementById('statRow').innerHTML = `<div class="error-msg" style="grid-column:1/-1">⚠️ Không tải được dữ liệu. Kiểm tra kết nối mạng.</div>`;
-    }
-  }
-
-  function showSkeletons() {
-    document.getElementById('statRow').innerHTML = `
-      <div class="stat-card"><div class="stat-label">Nhiệt độ TB</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
-      <div class="stat-card"><div class="stat-label">Cao nhất</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
-      <div class="stat-card"><div class="stat-label">Thấp nhất</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>
-      <div class="stat-card"><div class="stat-label">Độ ẩm TB</div><div class="sk" style="height:36px;margin-bottom:6px;"></div></div>`;
-    document.getElementById('dayStatsContent').innerHTML = '<div class="loading-msg">⏳ Đang tải...</div>';
-    document.getElementById('forecastContent').innerHTML = '<div class="loading-msg">⏳ Đang tải...</div>';
-  }
-
-  // ===== RENDER STATS =====
-  function renderStats(w, fc) {
-    const temps = fc.list.map(i => i.main.temp);
-    const hums = fc.list.map(i => i.main.humidity);
-    const avg = Math.round(temps.reduce((a,b)=>a+b,0)/temps.length);
-    const max = Math.round(Math.max(...temps));
-    const min = Math.round(Math.min(...temps));
-    const avgHum = Math.round(hums.reduce((a,b)=>a+b,0)/hums.length);
-
-    document.getElementById('statRow').innerHTML = `
-      <div class="stat-card">
-        <div class="stat-label">Nhiệt độ TB (5 ngày)</div>
-        <div class="stat-val">${avg}<span class="stat-unit">°C</span></div>
-        <div class="stat-sub neutral">Dựa trên dự báo 5 ngày</div>
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <div class="form-header">
+        <div class="form-title">Chào mừng trở lại!</div>
+        <div class="form-subtitle">Đăng nhập để xem thời tiết của bạn</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Cao nhất (5 ngày)</div>
-        <div class="stat-val">${max}<span class="stat-unit">°C</span></div>
-        <div class="stat-sub up">▲ Nhiệt độ đỉnh dự báo</div>
+
+      <!-- ✅ THÊM: Thông báo lỗi/thành công -->
+      <div
+        id="auth-message"
+        style="
+          display: none;
+          padding: 10px 14px;
+          border-radius: 10px;
+          margin-bottom: 14px;
+          font-size: 13px;
+          font-family: &quot;Outfit&quot;, sans-serif;
+        "
+      ></div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="email@example.com" />
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Thấp nhất (5 ngày)</div>
-        <div class="stat-val">${min}<span class="stat-unit">°C</span></div>
-        <div class="stat-sub down">▼ Nhiệt độ đáy dự báo</div>
+
+      <div class="field">
+        <label for="pw">Mật khẩu</label>
+        <div class="password-wrap">
+          <input type="password" id="pw" placeholder="Nhập mật khẩu" />
+          <button class="eye-btn" onclick="togglePw('pw', this)">👁</button>
+        </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Độ ẩm TB</div>
-        <div class="stat-val">${avgHum}<span class="stat-unit">%</span></div>
-        <div class="stat-sub neutral">${avgHum>75?'Độ ẩm cao':avgHum>55?'Độ ẩm vừa':'Khô thoáng'}</div>
-      </div>`;
-  }
 
-  // ===== RENDER CHART =====
-  function renderChart({ w, fc }) {
-    const DAYS = ['CN','T2','T3','T4','T5','T6','T7'];
+      <div class="row-options">
+        <div class="remember-row">
+          <input type="checkbox" id="remember" />
+          <label for="remember">Ghi nhớ đăng nhập</label>
+        </div>
+        <a href="#" class="forgot-link" onclick="handleForgotPassword(event)"
+          >Quên mật khẩu?</a
+        >
+      </div>
 
-    // Group forecast by day
-    const dayMap = {};
-    fc.list.forEach(item => {
-      const d = new Date(item.dt * 1000);
-      const key = d.toDateString();
-      if(!dayMap[key]) dayMap[key] = { temps: [], hums: [], items: [] };
-      dayMap[key].temps.push(item.main.temp);
-      dayMap[key].hums.push(item.main.humidity);
-      dayMap[key].items.push(item);
-    });
+      <!-- ✅ SỬA: Thay <a> thành <button>, gọi hàm handleLogin() -->
+      <button class="btn-login" id="btnLogin" onclick="handleLogin()">
+        Đăng nhập
+      </button>
 
-    let entries = Object.entries(dayMap);
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">hoặc</div>
+        <div class="divider-line"></div>
+      </div>
 
-    // Filter by month if selected
-    if(selectedMonth >= 0) {
-      entries = entries.filter(([key]) => new Date(key).getMonth() === selectedMonth);
-    }
+      <button class="btn-google" onclick="handleGoogleLogin()">
+        <div class="google-icon"></div>
+        Đăng nhập với Google
+      </button>
 
-    const labels = entries.map(([key], i) => {
-      const d = new Date(key);
-      return i === 0 ? 'Hôm nay' : DAYS[d.getDay()];
-    });
-    const maxTemps = entries.map(([,v]) => Math.round(Math.max(...v.temps)));
-    const minTemps = entries.map(([,v]) => Math.round(Math.min(...v.temps)));
-    const avgTemps = entries.map(([,v]) => Math.round(v.temps.reduce((a,b)=>a+b,0)/v.temps.length));
+      <div class="register-link">
+        Chưa có tài khoản? <a href="./sign_up.html">Đăng ký miễn phí</a>
+      </div>
+    </div>
 
-    // Current weather as reference point
-    const currentTemp = Math.round(w.main.temp);
+    <!-- ✅ THÊM: Supabase config chung -->
+    <script src="../js/supabase-config.js"></script>
 
-    document.getElementById('chartTitle').textContent =
-      selectedMonth >= 0
-        ? `Dự báo tháng ${selectedMonth+1} — ${document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text}`
-        : `Dự báo 5 ngày — ${document.getElementById('citySelect').options[document.getElementById('citySelect').selectedIndex].text}`;
-
-    if(myChart) myChart.destroy();
-    const ctx = document.getElementById('tempChart').getContext('2d');
-    myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          {
-            label: 'Cao nhất',
-            data: maxTemps,
-            borderColor: '#EF9F27',
-            backgroundColor: 'rgba(239,159,39,0.1)',
-            borderWidth: 2.5,
-            pointBackgroundColor: '#EF9F27',
-            pointRadius: 5,
-            pointHoverRadius: 7,
-            tension: 0.4,
-            fill: false,
-          },
-          {
-            label: 'Thấp nhất',
-            data: minTemps,
-            borderColor: '#42A5F5',
-            backgroundColor: 'rgba(66,165,245,0.1)',
-            borderWidth: 2.5,
-            pointBackgroundColor: '#42A5F5',
-            pointRadius: 5,
-            pointHoverRadius: 7,
-            tension: 0.4,
-            fill: false,
-          },
-          {
-            label: 'Trung bình',
-            data: avgTemps,
-            borderColor: '#66BB6A',
-            backgroundColor: 'rgba(102,187,106,0.08)',
-            borderWidth: 2,
-            pointBackgroundColor: '#66BB6A',
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            tension: 0.4,
-            fill: false,
-          },
-          {
-            label: 'Hiện tại',
-            data: [currentTemp, ...Array(labels.length-1).fill(null)],
-            borderColor: 'rgba(255,255,255,0.35)',
-            borderDash: [5,4],
-            borderWidth: 1.5,
-            pointBackgroundColor: '#fff',
-            pointRadius: 5,
-            tension: 0,
-            fill: false,
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: { mode: 'index', intersect: false },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: 'rgba(26,45,69,0.95)',
-            borderColor: 'rgba(66,165,245,0.3)',
-            borderWidth: 1,
-            titleColor: '#fff',
-            bodyColor: 'rgba(255,255,255,0.7)',
-            padding: 10,
-            callbacks: {
-              label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y !== null ? ctx.parsed.y + '°C' : '--'}`
-            }
-          }
-        },
-        scales: {
-          x: {
-            grid: { color: 'rgba(255,255,255,0.05)' },
-            ticks: { color: 'rgba(255,255,255,0.45)', font: { size: 12, family: 'Outfit' } }
-          },
-          y: {
-            grid: { color: 'rgba(255,255,255,0.05)' },
-            ticks: { color: 'rgba(255,255,255,0.45)', font: { size: 12, family: 'Outfit' }, callback: v => v + '°' },
-          }
+    <script>
+      // Toggle mật khẩu (giữ nguyên)
+      function togglePw(id, btn) {
+        const inp = document.getElementById(id);
+        if (inp.type === "password") {
+          inp.type = "text";
+          btn.textContent = "🙈";
+        } else {
+          inp.type = "password";
+          btn.textContent = "👁";
         }
       }
-    });
-  }
 
-  // ===== RENDER DAY STATS =====
-  function renderDayStats(w) {
-    const clouds = w.clouds.all;
-    const sunny = Math.round((1 - clouds/100) * 100);
-    const rainy = w.rain ? Math.min(clouds, 80) : Math.round(clouds * 0.3);
-    const cloudy = Math.round(clouds * 0.6);
-    const stormy = w.weather[0].id >= 200 && w.weather[0].id < 300 ? 20 : Math.round(clouds * 0.1);
+      // ====================================================
+      // HIỂN THỊ THÔNG BÁO
+      // ====================================================
+      function showMsg(text, isError = false) {
+        const el = document.getElementById("auth-message");
+        el.textContent = text;
+        el.style.display = "block";
+        el.style.background = isError
+          ? "rgba(229,57,53,0.15)"
+          : "rgba(76,175,80,0.15)";
+        el.style.color = isError ? "#EF5350" : "#4CAF50";
+        el.style.border = isError
+          ? "1px solid rgba(229,57,53,0.3)"
+          : "1px solid rgba(76,175,80,0.3)";
+      }
 
-    const hum = w.main.humidity;
-    const spd = Math.round(w.wind.speed * 3.6);
-    const vis = Math.round((w.visibility || 10000) / 1000);
-    const pressure = w.main.pressure;
+      // ====================================================
+      // ĐĂNG NHẬP BẰNG EMAIL + PASSWORD
+      // ====================================================
+      async function handleLogin() {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("pw").value;
+        const btn = document.getElementById("btnLogin");
 
-    document.getElementById('dayStatsContent').innerHTML = `
-      <div class="ds-row">
-        <div class="ds-icon">🌡️</div>
-        <div class="ds-info">
-          <div class="ds-label">Nhiệt độ hiện tại</div>
-          <div class="ds-bar-wrap"><div class="ds-bar" style="width:${Math.min((w.main.temp/45)*100,100)}%;background:#EF9F27;"></div></div>
-        </div>
-        <div class="ds-count" style="color:#EF9F27;">${Math.round(w.main.temp)}°</div>
-      </div>
-      <div class="ds-row">
-        <div class="ds-icon">💧</div>
-        <div class="ds-info">
-          <div class="ds-label">Độ ẩm: ${hum >= 75 ? 'Cao' : hum >= 50 ? 'Vừa' : 'Thấp'}</div>
-          <div class="ds-bar-wrap"><div class="ds-bar" style="width:${hum}%;background:#42A5F5;"></div></div>
-        </div>
-        <div class="ds-count" style="color:#42A5F5;">${hum}%</div>
-      </div>
-      <div class="ds-row">
-        <div class="ds-icon">💨</div>
-        <div class="ds-info">
-          <div class="ds-label">Tốc độ gió: ${spd < 20 ? 'Nhẹ' : spd < 40 ? 'Vừa' : 'Mạnh'}</div>
-          <div class="ds-bar-wrap"><div class="ds-bar" style="width:${Math.min(spd/80*100,100)}%;background:#66BB6A;"></div></div>
-        </div>
-        <div class="ds-count" style="color:#66BB6A;">${spd}</div>
-      </div>
-      <div class="ds-row">
-        <div class="ds-icon">☁️</div>
-        <div class="ds-info">
-          <div class="ds-label">Độ phủ mây: ${clouds}%</div>
-          <div class="ds-bar-wrap"><div class="ds-bar" style="width:${clouds}%;background:#90A4AE;"></div></div>
-        </div>
-        <div class="ds-count" style="color:#90A4AE;">${clouds}%</div>
-      </div>
-      <div class="ds-row">
-        <div class="ds-icon">👁️</div>
-        <div class="ds-info">
-          <div class="ds-label">Tầm nhìn: ${vis >= 8 ? 'Tốt' : vis >= 4 ? 'Trung bình' : 'Kém'}</div>
-          <div class="ds-bar-wrap"><div class="ds-bar" style="width:${Math.min(vis/10*100,100)}%;background:#1D9E75;"></div></div>
-        </div>
-        <div class="ds-count" style="color:#1D9E75;">${vis}km</div>
-      </div>
-      <div class="ds-row">
-        <div class="ds-icon">🔵</div>
-        <div class="ds-info">
-          <div class="ds-label">Áp suất khí quyển</div>
-          <div class="ds-bar-wrap"><div class="ds-bar" style="width:${Math.min((pressure-950)/100*100,100)}%;background:#CE93D8;"></div></div>
-        </div>
-        <div class="ds-count" style="color:#CE93D8;font-size:13px;">${pressure}</div>
-      </div>`;
-  }
+        // Validate cơ bản
+        if (!email || !password) {
+          showMsg("Vui lòng nhập email và mật khẩu!", true);
+          return;
+        }
 
-  // ===== RENDER FORECAST COMPARE =====
-  function renderForecast(fc) {
-    const DAYS = ['CN','T2','T3','T4','T5','T6','T7'];
-    const dayMap = {};
-    fc.list.forEach(item => {
-      const d = new Date(item.dt * 1000);
-      const key = d.toDateString();
-      if(!dayMap[key]) dayMap[key] = { temps: [], items: [] };
-      dayMap[key].temps.push(item.main.temp);
-      dayMap[key].items.push(item);
-    });
+        btn.disabled = true;
+        btn.textContent = "Đang đăng nhập...";
 
-    const entries = Object.entries(dayMap).slice(0, 5);
-    const allMax = entries.map(([,v]) => Math.max(...v.temps));
-    const globalMax = Math.max(...allMax);
-    const globalMin = Math.min(...entries.map(([,v]) => Math.min(...v.temps)));
+        const { data, error } = await _supabase.auth.signInWithPassword({
+          email: email,
+          password: password,
+        });
 
-    document.getElementById('forecastContent').innerHTML = entries.map(([key, val], i) => {
-      const d = new Date(key);
-      const label = i === 0 ? 'Hôm nay' : DAYS[d.getDay()];
-      const max = Math.round(Math.max(...val.temps));
-      const min = Math.round(Math.min(...val.temps));
-      const avg = Math.round(val.temps.reduce((a,b)=>a+b,0)/val.temps.length);
-      const barW = globalMax > globalMin ? Math.round((Math.max(...val.temps)-globalMin)/(globalMax-globalMin)*100) : 50;
-      const prevAvg = avg - Math.floor(Math.random()*3-1); // Giả lập năm trước
-      const diff = avg - prevAvg;
+        if (error) {
+          showMsg("Sai email hoặc mật khẩu! Vui lòng thử lại.", true);
+          btn.disabled = false;
+          btn.textContent = "Đăng nhập";
+          return;
+        }
 
-      return `<div class="yc-row">
-        <div class="yc-month">${label}</div>
-        <div class="yc-bars">
-          <div class="yc-bar-row">
-            <div class="yc-bar-label">Max</div>
-            <div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:${barW}%;background:#EF9F27;"></div></div>
-          </div>
-          <div class="yc-bar-row">
-            <div class="yc-bar-label">Min</div>
-            <div class="yc-bar-wrap"><div class="yc-bar-fill" style="width:${Math.round((min-globalMin)/(globalMax-globalMin||1)*100)}%;background:#42A5F5;"></div></div>
-          </div>
-        </div>
-        <div class="yc-temp">${max}°</div>
-        <div class="yc-diff ${diff>0?'diff-up':diff<0?'diff-down':'diff-eq'}">${diff>0?'+'+diff:diff}°</div>
-      </div>`;
-    }).join('');
-  }
+        // ✅ Đăng nhập thành công → chuyển về trang chủ
+        showMsg("Đăng nhập thành công! Đang chuyển hướng...");
+        setTimeout(() => {
+          window.location.href = "../index.html";
+        }, 800);
+      }
 
-  // ===== EXPORT CHART =====
-  function exportChart() {
-    if(!myChart) { alert('Chưa có dữ liệu để xuất!'); return; }
-    const canvas = document.getElementById('tempChart');
-    const link = document.createElement('a');
-    link.download = `skyla_history_${document.getElementById('citySelect').value.replace(/ /g,'_')}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  }
+      // ====================================================
+      // ĐĂNG NHẬP BẰNG GOOGLE
+      // ====================================================
+      async function handleGoogleLogin() {
+        const { data, error } = await _supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: window.location.origin + "/index.html",
+          },
+        });
+        if (error) {
+          showMsg("Không thể đăng nhập bằng Google: " + error.message, true);
+        }
+        // Supabase sẽ tự redirect sang Google
+      }
 
-  // ===== INIT =====
-  loadHistory();
-</script>
-<script src="chatbox.js"></script>
-</body>
+      // ====================================================
+      // QUÊN MẬT KHẨU
+      // ====================================================
+      async function handleForgotPassword(e) {
+        e.preventDefault();
+        const email = document.getElementById("email").value.trim();
+        if (!email) {
+          showMsg('Nhập email ở trên rồi bấm "Quên mật khẩu" nhé!', true);
+          return;
+        }
+        const { error } = await _supabase.auth.resetPasswordForEmail(email);
+        if (error) {
+          showMsg("Lỗi: " + error.message, true);
+        } else {
+          showMsg("Đã gửi email khôi phục mật khẩu! Kiểm tra hộp thư.");
+        }
+      }
+
+      // ====================================================
+      // NHẤN ENTER ĐỂ ĐĂNG NHẬP
+      // ====================================================
+      document.getElementById("pw").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handleLogin();
+      });
+
+      // ====================================================
+      // NẾU ĐÃ ĐĂNG NHẬP → TỰ CHUYỂN VỀ TRANG CHỦ
+      // ====================================================
+      redirectIfLoggedIn();
+    </script>
+  </body>
 </html>
