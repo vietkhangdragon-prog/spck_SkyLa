@@ -1,21 +1,16 @@
 /* ================================================================
-   SKYLA CHATBOX WIDGET
-   Nhúng vào cuối <body> của tất cả trang:
-   <script src="skyla_chat.js"></script>
-
-   SAU KHI DEPLOY CLOUDFLARE WORKER:
-   Thay URL bên dưới bằng URL worker của bạn
+   SKYLA CHATBOX WIDGET (Phiên bản hỗ trợ Google Gemini AI)
 ================================================================ */
 
 (function () {
 
-  // ⬇ Thay bằng URL Cloudflare Worker của bạn sau khi deploy
+  // ⬇ Đảm bảo URL này là Worker của bạn
   const WORKER_URL = 'https://skyla.vietkhang-dragon.workers.dev/';
 
   const SYSTEM_PROMPT = `Bạn là trợ lý thời tiết AI của SkyLa — ứng dụng thời tiết thông minh Việt Nam.
 Nhiệm vụ: tư vấn thời tiết, gợi ý trang phục, hoạt động phù hợp, giải thích hiện tượng khí tượng.
 Trả lời ngắn gọn, thân thiện bằng tiếng Việt. Dùng emoji phù hợp.
-Nếu hỏi số liệu cụ thể, nhắc user xem trực tiếp trên app SkyLa.`;
+`;
 
   let messages = [];
   let isOpen = false;
@@ -240,7 +235,7 @@ Nếu hỏi số liệu cụ thể, nhắc user xem trực tiếp trên app SkyL
       <div class="sc-quick">
         <div class="sc-qbtn" onclick="skylaQuick('Hôm nay có mưa không?')">🌧 Mưa không?</div>
         <div class="sc-qbtn" onclick="skylaQuick('Mặc gì cho hợp thời tiết hôm nay?')">👕 Mặc gì?</div>
-        <div class="sc-qbtn" onclick="skylaQuick('Thời tiết tuần này thế nào?')">📅 Tuần này</div>
+        <div class="sc-qbtn" onclick="skylaQuick('Hẹn hò thời tiết này ok hợp lí ko?')">💕 Hẹn hò?</div>
         <div class="sc-qbtn" onclick="skylaQuick('Tia UV hôm nay có cao không?')">☀️ Tia UV</div>
       </div>
 
@@ -270,10 +265,14 @@ Nếu hỏi số liệu cụ thể, nhắc user xem trực tiếp trên app SkyL
     const div = document.createElement('div');
     div.className = `sc-msg ${role}`;
     const isUser = role === 'user';
+    
+    // Convert markdown bold to HTML (for Gemini's response format)
+    const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+
     div.innerHTML = `
       ${!isUser ? '<div class="sc-msg-av">🌤</div>' : ''}
       <div>
-        <div class="sc-bubble">${text.replace(/\n/g, '<br>')}</div>
+        <div class="sc-bubble">${formattedText}</div>
         <div class="sc-time">${getTime()}</div>
       </div>
       ${isUser ? '<div class="sc-msg-av" style="background:rgba(25,118,210,0.25);">👤</div>' : ''}`;
@@ -302,7 +301,7 @@ Nếu hỏi số liệu cụ thể, nhắc user xem trực tiếp trên app SkyL
     const pulse = document.getElementById('skyla-fab-pulse');
     box.classList.toggle('open', isOpen);
     if (isOpen) {
-      if (pulse) pulse.style.animation = 'none'; // tắt pulse sau lần mở đầu
+      if (pulse) pulse.style.animation = 'none';
       setTimeout(() => { const inp = document.getElementById('scInput'); if (inp) inp.focus(); }, 300);
     }
   };
@@ -338,10 +337,7 @@ Nếu hỏi số liệu cụ thể, nhắc user xem trực tiếp trên app SkyL
     showTyping();
 
     try {
-      // Kiểm tra xem đã thay WORKER_URL chưa
-      if (WORKER_URL.includes('YOUR_NAME')) {
-        throw new Error('NO_WORKER');
-      }
+      if (WORKER_URL.includes('YOUR_NAME')) throw new Error('NO_WORKER');
 
       const res = await fetch(WORKER_URL, {
         method: 'POST',
@@ -351,21 +347,33 @@ Nếu hỏi số liệu cụ thể, nhắc user xem trực tiếp trên app SkyL
 
       const data = await res.json();
       removeTyping();
+      console.log("☁️ Dữ liệu từ Gemini:", data);
 
-      if (data.content && data.content[0]) {
-        const reply = data.content[0].text;
+      // Xử lý lỗi từ máy chủ
+      if (data.error) {
+        addMsg('error', `⚠️ Lỗi AI: ${data.error.message || JSON.stringify(data.error)}`);
+        isLoading = false;
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      // Nhận diện dữ liệu Gemini trả về
+      let reply = "";
+if (data.content && data.content[0] && data.content[0].text) {
+  reply = data.content[0].text;
+}
+
+      if (reply) {
         addMsg('bot', reply);
         messages.push({ role: 'assistant', content: reply });
       } else {
-        addMsg('error', '⚠️ Có lỗi xảy ra, thử lại nhé!');
+        addMsg('error', '⚠️ Không thể đọc dữ liệu. Xem log F12!');
       }
+
     } catch (e) {
       removeTyping();
-      if (e.message === 'NO_WORKER') {
-        addMsg('error', '⚙️ Chưa cấu hình Worker URL!\nMở file skyla_chat.js và thay WORKER_URL bằng URL Cloudflare Worker của bạn.');
-      } else {
-        addMsg('error', '⚠️ Không kết nối được server. Kiểm tra lại Worker URL!');
-      }
+      console.error("Lỗi kết nối:", e);
+      addMsg('error', '⚠️ Lỗi kết nối máy chủ. Hãy thử lại!');
     }
 
     isLoading = false;

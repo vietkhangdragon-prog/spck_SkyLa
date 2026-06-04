@@ -120,58 +120,59 @@
             ...
           </div>
 
-          <!-- ✅ Dropdown menu user -->
-          <div
-            id="userMenu"
-            style="
-              display: none;
-              position: absolute;
-              top: 48px;
-              right: 0;
-              z-index: 100;
-              background: rgba(13, 27, 46, 0.97);
-              border: 1px solid rgba(255, 255, 255, 0.1);
-              border-radius: 12px;
-              padding: 10px 0;
-              min-width: 220px;
-              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-              font-family: &quot;Outfit&quot;, sans-serif;
-            "
-          >
-            <div
-              id="userMenuName"
-              style="
-                padding: 10px 16px;
-                color: #fff;
-                font-size: 14px;
-                font-weight: 600;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-              "
-            >
-              Đang tải...
-            </div>
-            <div
-              id="userMenuEmail"
-              style="
-                padding: 6px 16px 10px;
-                color: rgba(255, 255, 255, 0.5);
-                font-size: 12px;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-              "
-            ></div>
-            <div
-              onclick="logOut()"
-              style="
-                padding: 10px 16px;
-                color: #ef5350;
-                font-size: 13px;
-                cursor: pointer;
-                transition: background 0.2s;
-              "
-              onmouseover="this.style.background = 'rgba(255,255,255,0.05)'"
-              onmouseout="this.style.background = 'transparent'"
-            >
-              🚪 Đăng xuất
+       <div
+  id="userMenu"
+  style="
+    display: none;
+    position: absolute;
+    top: 48px;
+    right: 0;
+    z-index: 100;
+    background: rgba(13, 27, 46, 0.97);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px 0;
+    min-width: 220px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    font-family: 'Outfit', sans-serif;
+  "
+>
+  <!-- Avatar + Tên + Email -->
+  <div style="padding: 14px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+    <div style="position: relative; cursor: pointer;" onclick="document.getElementById('avatarFileInput').click()">
+      <img
+        id="userMenuAvatar"
+        src=""
+        alt="avatar"
+        style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(25,118,210,0.6); background: #1a2a40;"
+      >
+      <div style="position: absolute; inset: 0; border-radius: 50%; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; font-size: 14px;"
+        onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">📷</div>
+    </div>
+    <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="uploadAvatar(this)">
+    <div style="flex:1; min-width:0;">
+      <div id="userMenuName" style="color:#fff; font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Đang tải...</div>
+      <div id="userMenuEmail" style="color:rgba(255,255,255,0.45); font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+    </div>
+  </div>
+
+  <!-- Nơi ở -->
+  <div style="padding: 8px 16px 10px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+    <div id="userMenuLocation" style="color: rgba(255,255,255,0.5); font-size: 12px;">📍 Đang tải...</div>
+  </div>
+
+  <!-- Đăng xuất -->
+  <div
+    onclick="logOut()"
+    style="padding: 10px 16px; color: #ef5350; font-size: 13px; cursor: pointer; transition: background 0.2s;"
+    onmouseover="this.style.background='rgba(255,255,255,0.05)'"
+    onmouseout="this.style.background='transparent'"
+  >
+    🚪 Đăng xuất
+  </div>
+
+</div>
+</div>
             </div>
           </div>
         </div>
@@ -907,6 +908,88 @@
         renderSideCities();
       }
     </script>
-    <script src="chatbox.js"></script>
+    <script src="./js/chatbot.js"></script>
+    <script src="./js/supabase-config.js"></script>
+
+<script src="./js/profile.js"></script>
+<script>
+async function loadUserMenu() {
+  const user = await getUser();
+  if (!user) return;
+
+  document.getElementById('userMenuEmail').textContent = user.email || '';
+
+  const { data: profile } = await _supabase
+    .from('profiles')
+    .select('full_name, avatar_url')
+    .eq('id', user.id)
+    .single();
+
+  const name = profile?.full_name || user.user_metadata?.full_name || 'Người dùng SkyLa';
+  document.getElementById('userMenuName').textContent = name;
+
+  // Avatar
+  const avatarImg = document.getElementById('userMenuAvatar');
+  if (profile?.avatar_url) {
+    avatarImg.src = profile.avatar_url;
+  } else {
+    avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1565C0&color=fff&size=84&bold=true`;
+  }
+
+  // Nơi ở từ GPS
+  const city = localStorage.getItem('skylaHome');
+  document.getElementById('userMenuLocation').textContent = city ? '📍 ' + city : '📍 Chưa xác định';
+
+  updateNavAvatar(profile?.avatar_url, name);
+}
+
+async function uploadAvatar(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) { alert('Ảnh quá lớn! Tối đa 2MB'); return; }
+
+  const user = await getUser();
+  if (!user) return;
+
+  const ext = file.name.split('.').pop();
+  const path = `${user.id}/avatar.${ext}`;
+
+  const { error } = await _supabase.storage.from('avatars').upload(path, file, { upsert: true });
+  if (error) { alert('Upload thất bại: ' + error.message); return; }
+
+  const { data } = _supabase.storage.from('avatars').getPublicUrl(path);
+  const url = data.publicUrl + '?t=' + Date.now();
+
+  await _supabase.from('profiles').upsert({ id: user.id, avatar_url: url, updated_at: new Date().toISOString() });
+
+  document.getElementById('userMenuAvatar').src = url;
+  updateNavAvatar(url, null);
+  alert('✅ Cập nhật ảnh thành công!');
+}
+
+function updateNavAvatar(avatarUrl, name) {
+  const navAvatar = document.getElementById('navAvatar');
+  if (!navAvatar) return;
+  if (avatarUrl) {
+    navAvatar.innerHTML = `<img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="avatar">`;
+  } else if (name) {
+    const initials = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+    navAvatar.textContent = initials;
+  }
+}
+
+function toggleUserMenu() {
+  const menu = document.getElementById('userMenu');
+  const isOpen = menu.style.display === 'block';
+  menu.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) loadUserMenu();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadUserMenu();
+});
+</script>
+</script>
+    
   </body>
 </html>
